@@ -306,7 +306,7 @@ export default function App() {
         <section className="relative w-full h-[100dvh] overflow-hidden bg-[#050505] select-none">
 
           {/* 背景画像情報パネル */}
-          <div className={`absolute bottom-6 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className={`absolute inset-0 md:top-auto md:bottom-20 z-50 pointer-events-none transition-all duration-1000 px-4 md:px-0 flex items-center justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className={`bg-black/60 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-full md:w-[90vw] flex flex-col md:flex-row items-center gap-4 md:gap-6 max-h-[85dvh] overflow-y-auto ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
                <div className="flex-1 text-left w-full">
                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 tracking-widest flex items-center gap-2">
