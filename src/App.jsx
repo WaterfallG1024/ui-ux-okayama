@@ -303,21 +303,21 @@ export default function App() {
 
       <main>
         {/* ヒーローセクション: 被写界深度エフェクト */}
-        <section className="relative w-full h-screen overflow-hidden bg-[#050505] select-none">
+        <section className="relative w-full h-[100dvh] overflow-hidden bg-[#050505] select-none">
 
           {/* 背景画像情報パネル */}
-          <div className={`absolute bottom-8 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className={`bg-black/60 backdrop-blur-xs p-6 md:p-8 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-[90vw] flex flex-col md:flex-row items-center gap-6 ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
-               <div className="flex-1 text-left">
-                 <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-widest flex items-center gap-2">
-                   <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300" />
-                   岡山市北区牟佐(むさ)のひまわり畑
+          <div className={`absolute bottom-6 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`bg-black/60 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-full md:w-[90vw] flex flex-col md:flex-row items-center gap-4 md:gap-6 max-h-[85dvh] overflow-y-auto ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
+               <div className="flex-1 text-left w-full">
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 tracking-widest flex items-center gap-2">
+                   <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300 shrink-0" />
+                   <span className="leading-tight">岡山市北区牟佐(むさ)のひまわり畑</span>
                  </h3>
-                 <p className="text-sm md:text-lg text-gray-300 leading-relaxed font-light">
+                 <p className="text-xs sm:text-sm md:text-lg text-gray-300 leading-relaxed font-light">
                   西日本豪雨災害で浸水被害にあった農地に土壌改良のためひまわりを植えたのがきっかけで誕生したひまわり畑。駅からひまわり畑に向かう途中の潜水橋も見どころで、そのノスタルジックな風景を撮影する人も多数いる。
                  </p>
                </div>
-               <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2 shadow-lg group">
+               <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0">
                  <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                  <span>閉じる</span>
                </button>
