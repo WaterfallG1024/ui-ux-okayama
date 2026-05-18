@@ -224,7 +224,9 @@ export default function App() {
   const [focusLayer, setFocusLayer] = useState('middle');
   const [activeDetail, setActiveDetail] = useState(null);
   const [showBackgroundInfo, setShowBackgroundInfo] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const sceneRef = useRef(null);
+  const heroRef = useRef(null);
   const requestRef = useRef();
 
   const target = useRef({ x: 0, y: 0 });
@@ -281,6 +283,21 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    const currentHero = heroRef.current;
+    if (currentHero) observer.observe(currentHero);
+
+    return () => {
+      if (currentHero) observer.unobserve(currentHero);
+    };
+  }, []);
+
   // ナビゲーション用のスムーズスクロール処理
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -306,7 +323,7 @@ export default function App() {
 
       <main>
         {/* ヒーローセクション: 被写界深度エフェクト */}
-        <section className="relative w-full h-[100dvh] overflow-hidden bg-[#050505] select-none">
+        <section ref={heroRef} className="relative w-full h-[100dvh] overflow-hidden bg-[#050505] select-none">
 
           {/* 背景画像情報パネル */}
           <div className={`absolute bottom-6 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -461,8 +478,8 @@ export default function App() {
                     <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity">
                       <img src={fruit.img} className="w-full h-full object-cover" alt={fruit.alt} loading="lazy" decoding="async" />
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 relative z-10 group-hover:text-transparent">{fruit.title}</h3>
-                    <p className="text-sm md:text-base text-gray-500 mb-4 md:mb-6 relative z-10 group-hover:text-transparent">{fruit.desc}</p>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 relative z-10 group-hover:text-transparent">{fruit.title}</h3>
+                    <p className="text-base md:text-lg text-gray-700 font-bold mb-4 md:mb-6 relative z-10 group-hover:text-transparent">{fruit.desc}</p>
                   </div>
                 </FadeInSection>
               ))}
@@ -615,7 +632,7 @@ export default function App() {
 
             <FadeInSection delay={400}>
               <div className="flex justify-center mt-20 md:mt-32 px-4 overflow-visible pb-10">
-                <div 
+                <div
                   className="relative inline-block bg-[#FFE600] border-[6px] border-black p-8 md:p-12 shadow-[15px_15px_0px_rgba(0,0,0,1)] text-black font-black leading-tight max-w-3xl cursor-pointer hover:scale-105 transition-transform duration-300"
                   style={{
                     transform: 'perspective(1000px) rotateY(-20deg) rotateX(5deg) skewY(3deg)',
@@ -624,8 +641,8 @@ export default function App() {
                   }}
                 >
                   <p className="flex items-center justify-center mb-6 md:mb-8">
-                    <span 
-                      className="text-5xl md:text-7xl text-white tracking-widest font-black" 
+                    <span
+                      className="text-5xl md:text-7xl text-white tracking-widest font-black"
                       style={{ textShadow: '-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 6px 6px 0 #000' }}
                     >
                       おっと!!
@@ -649,8 +666,20 @@ export default function App() {
         </section>
       </main>
 
+      {/* ボトムナビゲーション (ヒーローセクション外で表示) */}
+      <div
+        className={`fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex flex-nowrap items-center justify-center gap-0 sm:gap-2 w-[96%] sm:w-auto max-w-4xl p-1.5 sm:p-2 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
+      >
+        {NAV_ITEMS.map((item) => (
+          <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="flex flex-col items-center justify-center gap-1 sm:gap-1.5 py-2 px-1 sm:px-6 sm:py-2 hover:bg-white/10 rounded-full transition-all group flex-1 sm:flex-none">
+            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${item.color} group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform drop-shadow-md`} />
+            <span className="text-[14px] sm:text-[16px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
+          </button>
+        ))}
+      </div>
+
       {/* フッター */}
-      <footer className="bg-gray-100 text-gray-500 py-8 md:py-12 text-xs md:text-sm text-center border-t border-gray-200 px-4">
+      <footer className="bg-gray-100 text-gray-500 pt-8 pb-28 md:pt-12 md:pb-32 text-xs md:text-sm text-center border-t border-gray-200 px-4">
         <p>&copy; 2026 Waterfall All rights reserved.</p>
       </footer>
     </div>
