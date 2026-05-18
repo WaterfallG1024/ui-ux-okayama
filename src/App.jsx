@@ -311,19 +311,19 @@ export default function App() {
           {/* 背景画像情報パネル */}
           <div className={`absolute bottom-6 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className={`bg-black/60 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-full md:w-[90vw] flex flex-col md:flex-row items-center gap-4 md:gap-6 max-h-[85dvh] overflow-y-auto ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
-               <div className="flex-1 text-left w-full">
-                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 tracking-widest flex items-center gap-2">
-                   <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300 shrink-0" />
-                   <span className="leading-tight">岡山市北区牟佐(むさ)のひまわり畑</span>
-                 </h3>
-                 <p className="text-xs sm:text-sm md:text-lg text-gray-300 leading-relaxed font-light">
+              <div className="flex-1 text-left w-full">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 tracking-widest flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300 shrink-0" />
+                  <span className="leading-tight">岡山市北区牟佐(むさ)のひまわり畑</span>
+                </h3>
+                <p className="text-xs sm:text-sm md:text-lg text-gray-300 leading-relaxed font-light">
                   西日本豪雨災害で浸水被害にあった農地に土壌改良のためひまわりを植えたのがきっかけで誕生したひまわり畑。駅からひまわり畑に向かう途中の潜水橋も見どころで、そのノスタルジックな風景を撮影する人も多数いる。
-                 </p>
-               </div>
-               <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0">
-                 <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                 <span>閉じる</span>
-               </button>
+                </p>
+              </div>
+              <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0">
+                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                <span>閉じる</span>
+              </button>
             </div>
           </div>
 
@@ -583,9 +583,9 @@ export default function App() {
           <div className="max-w-3xl mx-auto">
             <FadeInSection>
               <div className="mb-12 md:mb-20 flex justify-center w-full px-2 overflow-visible relative z-50">
-                <div 
+                <div
                   className="flex flex-col items-start font-black text-black select-none whitespace-nowrap"
-                  style={{ 
+                  style={{
                     transform: 'perspective(1000px) rotateY(35deg) skewY(-10deg)',
                     transformOrigin: 'center center'
                   }}
@@ -593,7 +593,7 @@ export default function App() {
                   <h2 className="flex items-baseline tracking-tighter m-0">
                     <span className="text-4xl sm:text-6xl md:text-8xl leading-none">Go</span>
                     <span className="text-xl sm:text-3xl md:text-5xl leading-none ml-1 sm:ml-2 md:ml-3">to</span>
-                    <span className="text-[2.5rem] sm:text-[4.5rem] md:text-9xl leading-none ml-2 sm:ml-3 md:ml-6">OKAYAMA!!</span>
+                    <span className="text-[2.5rem] sm:text-[4.5rem] md:text-9xl leading-none ml-2 sm:ml-3 md:ml-6">OKAYAMA！</span>
                   </h2>
                   {/* スクリーンショットの下部にある矢印をSVGで再現 */}
                   <svg viewBox="0 0 100 24" className="w-full h-4 sm:h-8 md:h-12 mt-1 sm:mt-2 md:mt-4" preserveAspectRatio="none">
@@ -611,6 +611,39 @@ export default function App() {
                 <Compass className="group-hover:animate-spin-slow w-4 h-4 md:w-6 md:h-6" />
                 旅行プランを見る
               </button>
+            </FadeInSection>
+
+            <FadeInSection delay={400}>
+              <div className="flex justify-center mt-20 md:mt-32 px-4 overflow-visible pb-10">
+                <div 
+                  className="relative inline-block bg-[#FFE600] border-[6px] border-black p-8 md:p-12 shadow-[15px_15px_0px_rgba(0,0,0,1)] text-black font-black leading-tight max-w-3xl cursor-pointer hover:scale-105 transition-transform duration-300"
+                  style={{
+                    transform: 'perspective(1000px) rotateY(-20deg) rotateX(5deg) skewY(3deg)',
+                    transformOrigin: 'center center',
+                    borderRadius: '255px 15px 225px 15px/15px 225px 15px 255px'
+                  }}
+                >
+                  <p className="flex items-center justify-center mb-6 md:mb-8">
+                    <span 
+                      className="text-5xl md:text-7xl text-white tracking-widest font-black" 
+                      style={{ textShadow: '-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 6px 6px 0 #000' }}
+                    >
+                      おっと!!
+                    </span>
+                  </p>
+                  <p className="mb-6 md:mb-8 text-xl md:text-3xl text-center">
+                    岡山弁の<span className="text-4xl md:text-6xl text-[#FF004D] mx-2 inline-block -rotate-3" style={{ textShadow: '-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 4px 4px 0 #000' }}>「はよーしねー」</span>は
+                  </p>
+                  <p className="mb-8 md:mb-12 text-2xl md:text-4xl text-center">
+                    「早く死ね」では<span className="text-3xl md:text-5xl inline-block rotate-2 ml-1">ありません。</span>
+                  </p>
+                  <div className="flex justify-center">
+                    <p className="text-xl md:text-3xl text-center text-black bg-white border-4 border-black p-4 md:p-6 rounded-2xl shadow-[6px_6px_0px_rgba(0,0,0,1)] inline-block">
+                      「早くしなさい」という意味なので、<br className="md:hidden" />ご安心ください
+                    </p>
+                  </div>
+                </div>
+              </div>
             </FadeInSection>
           </div>
         </section>
