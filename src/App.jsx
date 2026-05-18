@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Sun, Droplets, Castle, Scissors, ChevronRight, Move, Compass, X, Image as ImageIcon } from 'lucide-react';
 //import bgImage from './assets/Ushimado.png';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
+import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
+import kojimajeansImg from './assets/KojimaJeans.webp';
+import kojimajeansImg2 from './assets/KojimaJeans2.webp';
 import kurashikiImg from './assets/KurashikiBikantiku.webp';
 import himawaribatake from './assets/HimawariBatake.webp';
 import peach from './assets/Peach.webp';
@@ -99,12 +102,12 @@ const DETAIL_DATA = {
   history: {
     title: "漆黒の城、岡山城",
     description: "豊臣秀吉の家臣である宇喜多秀家によって築かれた岡山城。外観が黒塗りの下見板張りであることから「烏城（うじょう）」とも呼ばれます。隣接する日本三名園の一つ「後楽園」とともに、岡山の歴史と文化を象徴する場所です。",
-    image: ""
+    image: okayamaCastleImg2
   },
   denim: {
     title: "世界に誇る児島デニム",
     description: "倉敷市児島地区は「国産ジーンズ発祥の地」として知られ、現在でも世界中のアパレルブランドから高い評価を受けています。藍染めの技術から縫製、ダメージ加工に至るまで、熟練の職人たちが手作業で仕上げるデニムはまさに芸術品です。",
-    image: ""
+    image: kojimajeansImg
   },
   tourism: {
     title: "風情あふれる歴史の町並み",
@@ -454,8 +457,8 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {FRUITS_DATA.map((fruit) => (
                 <FadeInSection key={fruit.title} delay={fruit.delay}>
-                  <div className="bg-gray-50 rounded-3xl p-6 md:p-8 h-64 md:h-80 flex flex-col items-center justify-center border border-gray-100 hover:shadow-2xl transition-shadow duration-500 group relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 group-hover:opacity-60 transition-opacity">
+                  <div className="bg-gray-50 rounded-3xl p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center border border-gray-100 hover:shadow-2xl transition-shadow duration-500 group relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity">
                       <img src={fruit.img} className="w-full h-full object-cover" alt={fruit.alt} loading="lazy" decoding="async" />
                     </div>
                     <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 relative z-10 group-hover:text-transparent">{fruit.title}</h3>
@@ -530,6 +533,7 @@ export default function App() {
 
             <FadeInSection delay={300}>
               <div className="w-full h-48 sm:h-64 md:h-96 bg-blue-900/30 rounded-3xl border border-blue-500/20 flex items-center justify-center backdrop-blur-sm overflow-hidden relative">
+                <img src={kojimajeansImg2} className="w-full h-full object-cover" alt="Kojima Jeans" loading="lazy" decoding="async" />
               </div>
             </FadeInSection>
           </div>
@@ -578,9 +582,25 @@ export default function App() {
         <section id="plan" className="py-20 md:py-32 bg-white text-black text-center px-4">
           <div className="max-w-3xl mx-auto">
             <FadeInSection>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tighter mb-6 md:mb-8">
-                さあ、晴れの国岡山へ。
-              </h2>
+              <div className="mb-12 md:mb-20 flex justify-center w-full px-2 overflow-visible relative z-50">
+                <div 
+                  className="flex flex-col items-start font-black text-black select-none whitespace-nowrap"
+                  style={{ 
+                    transform: 'perspective(1000px) rotateY(35deg) skewY(-10deg)',
+                    transformOrigin: 'center center'
+                  }}
+                >
+                  <h2 className="flex items-baseline tracking-tighter m-0">
+                    <span className="text-4xl sm:text-6xl md:text-8xl leading-none">Go</span>
+                    <span className="text-xl sm:text-3xl md:text-5xl leading-none ml-1 sm:ml-2 md:ml-3">to</span>
+                    <span className="text-[2.5rem] sm:text-[4.5rem] md:text-9xl leading-none ml-2 sm:ml-3 md:ml-6">OKAYAMA!!</span>
+                  </h2>
+                  {/* スクリーンショットの下部にある矢印をSVGで再現 */}
+                  <svg viewBox="0 0 100 24" className="w-full h-4 sm:h-8 md:h-12 mt-1 sm:mt-2 md:mt-4" preserveAspectRatio="none">
+                    <path d="M0,14 L92,8 L92,0 L100,11 L92,22 L92,14 L0,17 Z" fill="black" />
+                  </svg>
+                </div>
+              </div>
             </FadeInSection>
 
             <FadeInSection delay={200}>
