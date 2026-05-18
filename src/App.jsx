@@ -632,7 +632,7 @@ export default function App() {
                     </span>
                   </p>
                   <p className="mb-6 md:mb-8 text-xl md:text-3xl text-center">
-                    岡山弁の<span className="text-4xl md:text-6xl text-[#FF004D] mx-2 inline-block -rotate-3" style={{ textShadow: '-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 4px 4px 0 #000' }}>「はよーしねー」</span>は
+                    岡山弁の<span className="text-2xl md:text-6xl text-[#FF004D] mx-2 inline-block -rotate-3" style={{ textShadow: '-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 4px 4px 0 #000' }}>「はよーしねー」</span>は
                   </p>
                   <p className="mb-8 md:mb-12 text-2xl md:text-4xl text-center">
                     「早く死ね」では<span className="text-3xl md:text-5xl inline-block rotate-2 ml-1">ありません。</span>
