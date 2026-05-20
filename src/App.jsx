@@ -6,6 +6,7 @@ import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
 import kojimajeansImg from './assets/KojimaJeans.webp';
 import kojimajeansImg2 from './assets/KojimaJeans2.webp';
 import kurashikiImg from './assets/KurashikiBikantiku.webp';
+import kurashikiImg2 from './assets/KurashikiBikantiku2.webp';
 import himawaribatake from './assets/HimawariBatake.webp';
 import peach from './assets/Peach.webp';
 import muscat from './assets/Muscat.webp';
@@ -26,7 +27,7 @@ const LoadingScreen = React.memo(({ onComplete }) => {
     const t4 = setTimeout(() => onComplete(), 4500);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [onComplete]);
-
+  
   return (
     <div className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000 ${phase === 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
       <div className="relative w-64 h-64 flex flex-col items-center justify-center">
@@ -112,7 +113,7 @@ const DETAIL_DATA = {
   tourism: {
     title: "風情あふれる歴史の町並み",
     description: "倉敷美観地区は、江戸時代の白壁の屋敷や柳並木が美しい、岡山を代表する観光地です。倉敷川での舟流しや、大原美術館など、歴史とアートが融合したノスタルジックな風景を楽しむことができます。",
-    image: ""
+    image: kurashikiImg
   }
 };
 
@@ -550,7 +551,7 @@ export default function App() {
 
             <FadeInSection delay={300}>
               <div className="w-full h-48 sm:h-64 md:h-96 bg-blue-900/30 rounded-3xl border border-blue-500/20 flex items-center justify-center backdrop-blur-sm overflow-hidden relative">
-                <img src={kojimajeansImg2} className="w-full h-full object-cover" alt="Kojima Jeans" loading="lazy" decoding="async" />
+                <img src={kojimajeansImg} className="w-full h-full object-cover" alt="Kojima Jeans" loading="lazy" decoding="async" />
               </div>
             </FadeInSection>
           </div>
@@ -587,7 +588,7 @@ export default function App() {
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
                   <div className="aspect-[4/5] bg-orange-100 rounded-3xl overflow-hidden border border-orange-200 flex items-center justify-center relative shadow-2xl">
-                    <img src={kurashikiImg} className="w-full h-full object-cover" alt="Kurashiki Bikan Historical Quarter" loading="lazy" decoding="async" />
+                    <img src={kurashikiImg2} className="w-full h-full object-cover" alt="Kurashiki Bikan Historical Quarter" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
