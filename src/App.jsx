@@ -27,7 +27,7 @@ const LoadingScreen = React.memo(({ onComplete }) => {
     const t4 = setTimeout(() => onComplete(), 4500);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [onComplete]);
-  
+
   return (
     <div className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000 ${phase === 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
       <div className="relative w-64 h-64 flex flex-col items-center justify-center">
@@ -108,7 +108,7 @@ const DETAIL_DATA = {
   denim: {
     title: "世界に誇る児島デニム",
     description: "倉敷市児島地区は「国産ジーンズ発祥の地」として知られ、現在でも世界中のアパレルブランドから高い評価を受けています。藍染めの技術から縫製、ダメージ加工に至るまで、熟練の職人たちが手作業で仕上げるデニムはまさに芸術品です。",
-    image: kojimajeansImg
+    image: kojimajeansImg2
   },
   tourism: {
     title: "風情あふれる歴史の町並み",
@@ -674,7 +674,7 @@ export default function App() {
         {NAV_ITEMS.map((item) => (
           <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="flex flex-col items-center justify-center gap-1 sm:gap-1.5 py-2 px-1 sm:px-6 sm:py-2 hover:bg-white/10 rounded-full transition-all group flex-1 sm:flex-none">
             <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${item.color} group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform drop-shadow-md`} />
-            <span className="text-[14px] sm:text-[16px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
+            <span className="text-[12px] sm:text-[14px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
           </button>
         ))}
       </div>
