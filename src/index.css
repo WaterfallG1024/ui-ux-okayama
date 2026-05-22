@@ -4,6 +4,10 @@
   --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
 }
 
+* {
+  cursor: url('./assets/MousePointer.png'), auto !important;
+}
+
 /* :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -56,10 +60,10 @@
   }
 } */
 
-body {
+/* body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
-}
+} */
 
 /* #root {
   width: 1126px;

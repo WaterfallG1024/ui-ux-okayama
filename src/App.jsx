@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sun, Droplets, Castle, Scissors, ChevronRight, Move, Compass, X, Image as ImageIcon } from 'lucide-react';
+import { Sun, Droplets, Castle, Scissors, ChevronRight, Move, Compass, X, Image as ImageIcon, ForkKnife } from 'lucide-react';
 //import bgImage from './assets/Ushimado.png';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
 import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
@@ -11,6 +11,10 @@ import himawaribatake from './assets/HimawariBatake.webp';
 import peach from './assets/Peach.webp';
 import muscat from './assets/Muscat.webp';
 import pione from './assets/Pione.webp';
+import barazushiImg from './assets/Barazushi.webp';
+import demikatsuDonImg from './assets/DemikatsuDon.webp';
+import hinaseKakiokoImg from './assets/HinaseKakioko.webp';
+import hiruzenYakisobaImg from './assets/HiruzenYakisoba.webp';
 
 // アプリケーション起動時のSVGローディングアニメーション制御
 const LoadingScreen = React.memo(({ onComplete }) => {
@@ -100,6 +104,11 @@ const DETAIL_DATA = {
     description: "岡山県は「フルーツ王国」として知られています。温暖な気候と豊かな自然が、清水白桃やマスカット・オブ・アレキサンドリア、ピオーネなど、最高品質の果物を育みます。特に白桃は、袋掛け栽培により美しい白さと上品な甘さを実現しています。",
     image: pione
   },
+  food: {
+    title: "絶品の、岡山グルメ。",
+    description: "ばら寿司やデミカツ丼など、岡山ならではの個性豊かなご当地グルメ。B級グルメから伝統的な味まで、訪れる人々を虜にする豊かな食文化がここにあります。",
+    image: barazushiImg
+  },
   history: {
     title: "漆黒の城、岡山城",
     description: "豊臣秀吉の家臣である宇喜多秀家によって築かれた岡山城。外観が黒塗りの下見板張りであることから「烏城（うじょう）」とも呼ばれます。隣接する日本三名園の一つ「後楽園」とともに、岡山の歴史と文化を象徴する場所です。",
@@ -119,6 +128,7 @@ const DETAIL_DATA = {
 
 const NAV_ITEMS = [
   { id: 'fruits', label: 'FRUITS', icon: Droplets, color: 'text-pink-400' },
+  { id: 'food', label: 'FOOD', icon: ForkKnife, color: 'text-yellow-300' },
   { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300' },
   { id: 'denim', label: 'DENIM', icon: Scissors, color: 'text-blue-300' },
   { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300' },
@@ -138,6 +148,45 @@ const FRUITS_DATA = [
     img: muscat,
     alt: 'Muscat bg',
     delay: 400
+  }
+];
+
+const FOOD_DATA = [
+  {
+    title: '岡山ばら寿司',
+    desc: '瀬戸内の海の幸と旬の野菜を散りばめた贅沢な郷土料理。',
+    img: barazushiImg,
+    alt: 'Okayama Barazushi',
+    delay: 300,
+    colSpan: 'md:col-span-2',
+    rowSpan: 'md:row-span-2'
+  },
+  {
+    title: 'デミカツ丼',
+    desc: '濃厚デミグラスソースの洋食カツ丼。',
+    img: demikatsuDonImg,
+    alt: 'Demi Katsudon',
+    delay: 400,
+    colSpan: 'md:col-span-1',
+    rowSpan: 'md:row-span-1'
+  },
+  {
+    title: 'ひるぜん焼そば',
+    desc: '濃厚な味噌ベースの甘辛ダレと鶏肉が絶妙。',
+    img: hiruzenYakisobaImg,
+    alt: 'Hiruzen Yakisoba',
+    delay: 500,
+    colSpan: 'md:col-span-1',
+    rowSpan: 'md:row-span-1'
+  },
+  {
+    title: '日生カキオコ',
+    desc: '旨味たっぷり、牡蠣のお好み焼き。',
+    img: hinaseKakiokoImg,
+    alt: 'Hinase Kakioko',
+    delay: 600,
+    colSpan: 'md:col-span-2',
+    rowSpan: 'md:row-span-1'
   }
 ];
 
@@ -450,7 +499,7 @@ export default function App() {
         {/* スクロール連動型コンテンツエリア */}
 
         {/* フルーツセクション */}
-        <section id="fruits" className="py-20 md:py-32 bg-white text-black text-center px-4 relative z-10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+        <section id="fruits" className="py-20 md:py-32 bg-white text-black text-center px-4 relative z-10 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
           <div className="max-w-5xl mx-auto">
             <FadeInSection>
               <Droplets className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-pink-500" />
@@ -475,12 +524,53 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {FRUITS_DATA.map((fruit) => (
                 <FadeInSection key={fruit.title} delay={fruit.delay}>
-                  <div className="bg-gray-50 rounded-3xl p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center border border-gray-100 hover:shadow-2xl transition-shadow duration-500 group relative overflow-hidden">
+                  <div className="bg-white rounded-3xl p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center shadow-sm border border-gray-100 hover:shadow-2xl transition-shadow duration-500 group relative overflow-hidden">
                     <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity">
                       <img src={fruit.img} className="w-full h-full object-cover" alt={fruit.alt} loading="lazy" decoding="async" />
                     </div>
                     <h3 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 relative z-10 group-hover:text-transparent">{fruit.title}</h3>
                     <p className="text-base md:text-lg text-gray-700 font-bold mb-4 md:mb-6 relative z-10 group-hover:text-transparent">{fruit.desc}</p>
+                  </div>
+                </FadeInSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* フードセクション */}
+        <section id="food" className="py-20 md:py-32 bg-[#FFF9F0] text-amber-950 text-center px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <FadeInSection>
+              <ForkKnife className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-orange-500" />
+            </FadeInSection>
+
+            <FadeInSection delay={100}>
+              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-700">
+                絶品の、<br className="md:hidden" />岡山グルメ。
+              </h2>
+            </FadeInSection>
+
+            <FadeInSection delay={200}>
+              <p className="text-base sm:text-xl md:text-2xl text-amber-900/80 mb-6 font-light leading-relaxed">
+                一度食べたら忘れられない。<br />
+                五感を刺激する、こだわりのローカルフード。
+              </p>
+            </FadeInSection>
+
+            <FadeInSection delay={250}>
+              <LearnMoreButton onClick={() => setActiveDetail('food')} text="グルメについてさらに詳しく" colorClass="text-orange-600 hover:text-orange-500" className="mb-10 md:mb-16" />
+            </FadeInSection>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 md:gap-6 h-auto md:h-[600px]">
+              {FOOD_DATA.map((food) => (
+                <FadeInSection key={food.title} delay={food.delay} className={`${food.colSpan} ${food.rowSpan} h-64 md:h-full`}>
+                  <div className="bg-amber-100/30 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 group relative w-full h-full flex items-end border border-amber-900/5">
+                    <img src={food.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt={food.alt} loading="lazy" decoding="async" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
+                    <div className="relative z-10 p-6 md:p-8 w-full text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-2 text-white drop-shadow-md">{food.title}</h3>
+                      <p className="text-sm md:text-base text-white/90 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{food.desc}</p>
+                    </div>
                   </div>
                 </FadeInSection>
               ))}
