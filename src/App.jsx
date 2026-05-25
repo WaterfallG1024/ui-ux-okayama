@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sun, Droplets, Castle, Scissors, ChevronRight, Move, Compass, X, Image as ImageIcon, ForkKnife } from 'lucide-react';
-//import bgImage from './assets/Ushimado.png';
+import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed } from 'lucide-react';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
 import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
+import korakuenImg from 'C:/Users/winim/.gemini/antigravity-ide/brain/f2601acb-e397-483e-a8e7-f11f04f6faba/okayama_korakuen_1779607695430.png';
 import kojimajeansImg from './assets/KojimaJeans.webp';
 import kojimajeansImg2 from './assets/KojimaJeans2.webp';
 import kurashikiImg from './assets/KurashikiBikantiku.webp';
@@ -123,12 +123,17 @@ const DETAIL_DATA = {
     title: "風情あふれる歴史の町並み",
     description: "倉敷美観地区は、江戸時代の白壁の屋敷や柳並木が美しい、岡山を代表する観光地です。倉敷川での舟流しや、大原美術館など、歴史とアートが融合したノスタルジックな風景を楽しむことができます。",
     image: kurashikiImg
+  },
+  korakuen: {
+    title: "日本三名園、後楽園",
+    description: "岡山藩主・池田綱政が造営した大名庭園。広い芝生や池、築山が織りなす美しい景観は「日本三名園」の一つに数えられ、四季折々の表情で訪れる人々を魅了します。",
+    image: korakuenImg
   }
 };
 
 const NAV_ITEMS = [
-  { id: 'fruits', label: 'FRUITS', icon: Droplets, color: 'text-pink-400' },
-  { id: 'food', label: 'FOOD', icon: ForkKnife, color: 'text-yellow-300' },
+  { id: 'fruits', label: 'FRUITS', icon: Grape, color: 'text-green-400' },
+  { id: 'food', label: 'FOOD', icon: UtensilsCrossed, color: 'text-yellow-300' },
   { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300' },
   { id: 'denim', label: 'DENIM', icon: Scissors, color: 'text-blue-300' },
   { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300' },
@@ -298,13 +303,34 @@ export default function App() {
       target.current.y = ((touch.clientY / innerHeight) - 0.5) * 20;
     };
 
-    // ジャイロセンサーの傾きから目標角度を計算（最大45度で制限）
+    // ジャイロセンサーの傾きから目標角度を計算（最大45度で制限、スマホ横向き対応）
     const handleDeviceOrientation = (e) => {
       if (e.beta === null || e.gamma === null) return;
-      const beta = Math.max(-45, Math.min(45, e.beta - 45));
-      const gamma = Math.max(-45, Math.min(45, e.gamma));
-      target.current.y = (beta / 45) * 20;
-      target.current.x = (gamma / 45) * 20;
+
+      let x = 0;
+      let y = 0;
+
+      let orientation = window.orientation || 0;
+      if (screen.orientation && screen.orientation.angle !== undefined) {
+        orientation = screen.orientation.angle;
+      }
+
+      if (orientation === 90) {
+        x = e.beta;
+        y = -e.gamma - 45;
+      } else if (orientation === -90 || orientation === 270) {
+        x = -e.beta;
+        y = e.gamma - 45;
+      } else {
+        x = e.gamma;
+        y = e.beta - 45;
+      }
+
+      const clampedX = Math.max(-45, Math.min(45, x));
+      const clampedY = Math.max(-45, Math.min(45, y));
+
+      target.current.x = (clampedX / 45) * 20;
+      target.current.y = (clampedY / 45) * 20;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -365,6 +391,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500 selection:text-white">
+      {/* ヒーロー画像のプリロード（低速通信環境におけるLCP最適化） */}
+      <link rel="preload" as="image" href={himawaribatake} fetchPriority="high" />
 
       <DetailScreen detailId={activeDetail} onClose={() => setActiveDetail(null)} />
 
@@ -376,34 +404,21 @@ export default function App() {
         <section ref={heroRef} className="relative w-full h-[100dvh] overflow-hidden bg-[#050505] select-none">
 
           {/* 背景画像情報パネル */}
-          <div className={`absolute bottom-6 md:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className={`bg-black/60 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-full md:w-[90vw] flex flex-col md:flex-row items-center gap-4 md:gap-6 max-h-[85dvh] overflow-y-auto ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
+          <div className={`absolute bottom-6 md:bottom-20 [@media(max-height:500px)]:bottom-2 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-1000 w-full px-4 md:px-0 flex justify-center ${showBackgroundInfo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`bg-black/60 backdrop-blur-md p-5 md:p-8 [@media(max-height:500px)]:p-3 rounded-3xl border border-white/20 shadow-2xl max-w-3xl w-full md:w-[90vw] flex flex-col md:flex-row items-center gap-4 md:gap-6 [@media(max-height:500px)]:gap-2 max-h-[85dvh] overflow-y-auto ${showBackgroundInfo ? 'pointer-events-auto' : ''}`}>
               <div className="flex-1 text-left w-full">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 tracking-widest flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300 shrink-0" />
-                  <span className="leading-tight">岡山市北区牟佐(むさ)のひまわり畑</span>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 [@media(max-height:500px)]:mb-1 tracking-widest flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4 text-green-300 shrink-0" />
+                  <span className="leading-tight [@media(max-height:500px)]:text-sm">岡山市北区牟佐(むさ)のひまわり畑</span>
                 </h3>
-                <p className="text-xs sm:text-sm md:text-lg text-gray-300 leading-relaxed font-light">
+                <p className="text-xs sm:text-sm md:text-lg [@media(max-height:500px)]:text-xs text-gray-300 leading-relaxed font-light">
                   西日本豪雨災害で浸水被害にあった農地に土壌改良のためひまわりを植えたのがきっかけで誕生したひまわり畑。駅からひまわり畑に向かう途中の潜水橋も見どころで、そのノスタルジックな風景を撮影する人も多数いる。
                 </p>
               </div>
-              <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0">
+              <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0 [@media(max-height:500px)]:mt-1">
                 <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                 <span>閉じる</span>
               </button>
-            </div>
-          </div>
-
-          {/* 操作説明UI */}
-          <div className={`absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 md:gap-4 bg-black/50 backdrop-blur-md px-4 py-2.5 md:px-6 md:py-3 rounded-full border border-white/10 shadow-2xl pointer-events-none w-[90%] md:w-[90%] max-w-max justify-center transition-all duration-800 ${showBackgroundInfo ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-            {/* <div className="flex items-center gap-1.5 md:gap-2">
-              <Move size={14} className="text-white/60 md:w-4 md:h-4" />
-              <span className="text-[10px] md:text-xs font-medium text-white/80 hidden sm:inline">なぞる・傾ける</span>
-              <span className="text-[10px] font-medium text-white/80 sm:hidden">スマホを傾ける</span>
-            </div>
-            <div className="w-px h-3 md:h-4 bg-white/20"></div> */}
-            <div className="flex items-center gap-1.5 md:gap-2 text-white/80 animate-bounce mt-1">
-              <span className="text-xl md:text-xs font-bold tracking-widest">SCROLL</span>
             </div>
           </div>
 
@@ -442,7 +457,7 @@ export default function App() {
 
               {/* 2. 中間レイヤー (Middle) - タイトルとナビゲーション */}
               <div
-                className={`absolute inset-0 flex flex-col items-center justify-start pt-[12vh] md:justify-center md:pt-0 pointer-events-none ${showBackgroundInfo ? '*:pointer-events-none' : ''}`}
+                className={`absolute inset-0 flex flex-col items-center justify-start pt-[12vh] [@media(max-height:500px)]:pt-[4vh] md:justify-center md:pt-0 pointer-events-none ${showBackgroundInfo ? '*:pointer-events-none' : ''}`}
                 style={{
                   transform: `translateZ(${focusLayer === 'middle' ? '50px' : '0px'})`,
                   filter: `blur(${blurs.middle}px)`,
@@ -451,7 +466,7 @@ export default function App() {
                 }}
               >
                 <h1
-                  className={`text-[20vw] md:text-[14vw] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 hover:from-orange-200 hover:to-orange-400 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105 transition-all duration-500 antialiased ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                  className={`text-[20vw] md:text-[14vw] [@media(max-height:500px)]:text-[25vh] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 hover:from-orange-200 hover:to-orange-400 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105 transition-all duration-500 antialiased ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
                   style={{
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))'
                   }}
@@ -460,35 +475,29 @@ export default function App() {
                 >
                   おかやま
                 </h1>
-                <p className={`text-sm sm:text-lg md:text-3xl font-medium tracking-widest text-blue-400 mt-[-1vw] md:mt-[-2vw] cursor-pointer drop-shadow-lg flex items-center gap-2 justify-center ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                <p className={`text-sm sm:text-lg md:text-3xl [@media(max-height:500px)]:text-base font-medium tracking-widest text-blue-400 mt-[-1vw] md:mt-[-2vw] cursor-pointer drop-shadow-lg flex items-center gap-2 justify-center ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
                   onMouseEnter={() => !showBackgroundInfo && setFocusLayer('middle')}
                   onClick={() => !showBackgroundInfo && setFocusLayer('middle')}
                 >
-                  <Sun className="w-6 h-6 md:w-6 md:h-6" />
+                  <Sun className="w-6 h-6 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4" />
                   晴れの国の魅力
                 </p>
 
                 {/* 各コンテンツへのナビゲーションボタン */}
                 <div
-                  className={`flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 md:mt-12 w-[95%] max-w-4xl ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                  className={`grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 mt-8 md:mt-12 [@media(max-height:500px)]:mt-3 w-full px-5 sm:w-[95%] sm:px-0 max-w-4xl ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
                   onMouseEnter={() => !showBackgroundInfo && setFocusLayer('middle')}
                 >
                   {NAV_ITEMS.map((item) => (
-                    <button key={item.id} onClick={(e) => { e.stopPropagation(); scrollToSection(item.id); }} className="flex items-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-110 shadow-lg group">
-                      <item.icon className={`w-5 h-5 md:w-6 md:h-6 ${item.color} group-hover:scale-110 transition-transform`} />
-                      <span className="text-xs md:text-sm font-bold tracking-widest text-white mt-0.5">{item.label}</span>
+                    <button key={item.id} onClick={(e) => { e.stopPropagation(); scrollToSection(item.id); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group">
+                      <item.icon className={`w-5 h-5 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4 ${item.color} group-hover:scale-110 transition-transform`} />
+                      <span className="text-xs md:text-sm [@media(max-height:500px)]:text-[10px] font-bold tracking-widest text-white mt-0.5 truncate">{item.label}</span>
                     </button>
                   ))}
-                  <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(true); setFocusLayer('back'); }} className="flex items-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-110 shadow-lg group">
-                    <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-green-300 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs md:text-sm font-bold tracking-widest text-white mt-0.5">背景をみる</span>
+                  <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(true); setFocusLayer('back'); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group">
+                    <ImageIcon className="w-5 h-5 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4 text-green-300 group-hover:scale-110 transition-transform" />
+                    <span className="text-xs md:text-sm [@media(max-height:500px)]:text-[10px] font-bold tracking-widest text-white mt-0.5 truncate">背景をみる</span>
                   </button>
-                  {/* <div className="w-full sm:w-auto flex justify-center mt-4 sm:mt-0 sm:ml-4">
-                    <button onClick={(e) => { e.stopPropagation(); scrollToSection('plan'); }} className="flex items-center gap-2 md:gap-3 px-8 py-3.5 md:px-10 md:py-4 bg-white hover:bg-gray-200 backdrop-blur-md rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] group text-black">
-                      <Compass className="w-5 h-5 md:w-6 md:h-6 group-hover:animate-spin-slow transition-transform" />
-                      <span className="text-xs md:text-sm font-bold tracking-widest mt-0.5">プランを立てる</span>
-                    </button>
-                  </div> */}
                 </div>
               </div>
 
@@ -502,12 +511,12 @@ export default function App() {
         <section id="fruits" className="py-20 md:py-32 bg-white text-black text-center px-4 relative z-10 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
           <div className="max-w-5xl mx-auto">
             <FadeInSection>
-              <Droplets className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-pink-500" />
+              <Grape className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-green-500" />
             </FadeInSection>
 
             <FadeInSection delay={100}>
               <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8">
-                果物の<br className="md:hidden" />宝庫。
+                果物の宝庫
               </h2>
             </FadeInSection>
 
@@ -518,7 +527,7 @@ export default function App() {
             </FadeInSection>
 
             <FadeInSection delay={250}>
-              <LearnMoreButton onClick={() => setActiveDetail('fruits')} text="果物についてさらに詳しく" colorClass="text-pink-500 hover:text-pink-400" className="mb-10 md:mb-16" />
+              <LearnMoreButton onClick={() => setActiveDetail('fruits')} text="果物についてさらに詳しく" colorClass="text-green-500 hover:text-pink-400" className="mb-10 md:mb-16" />
             </FadeInSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -541,12 +550,12 @@ export default function App() {
         <section id="food" className="py-20 md:py-32 bg-[#FFF9F0] text-amber-950 text-center px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
             <FadeInSection>
-              <ForkKnife className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-orange-500" />
+              <UtensilsCrossed className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-orange-500" />
             </FadeInSection>
 
             <FadeInSection delay={100}>
               <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-700">
-                絶品の、<br className="md:hidden" />岡山グルメ。
+                絶品の、<br className="md:hidden" />岡山グルメ
               </h2>
             </FadeInSection>
 
@@ -589,7 +598,7 @@ export default function App() {
 
                 <FadeInSection delay={100}>
                   <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
-                    美しき漆黒。
+                    美しき漆黒
                   </h2>
                 </FadeInSection>
 
@@ -624,7 +633,7 @@ export default function App() {
 
             <FadeInSection delay={100}>
               <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-blue-50">
-                世界に誇る青。
+                世界に誇る青
               </h2>
             </FadeInSection>
 
@@ -658,7 +667,7 @@ export default function App() {
 
                 <FadeInSection delay={100}>
                   <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
-                    時を忘れる、<br />白壁の町並み。
+                    時を忘れる、<br />白壁の町並み
                   </h2>
                 </FadeInSection>
 
@@ -683,6 +692,37 @@ export default function App() {
                 </FadeInSection>
               </div>
             </div>
+
+            {/* 後楽園ブロック */}
+            <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 mt-20 md:mt-32">
+              <div className="flex-1 text-center md:text-left">
+                <FadeInSection delay={100}>
+                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
+                    四季が彩る、<br />天下の名園
+                  </h2>
+                </FadeInSection>
+
+                <FadeInSection delay={200}>
+                  <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 font-light leading-relaxed">
+                    日本三名園のひとつ、岡山後楽園。<br />
+                    広大な芝生、池、そして茶室。<br />
+                    岡山城を借景にした、息を呑むような大名庭園の美しさ。
+                  </p>
+                </FadeInSection>
+
+                <FadeInSection delay={300}>
+                  <LearnMoreButton onClick={() => setActiveDetail('korakuen')} text="岡山後楽園についてさらに詳しく" colorClass="text-green-600 hover:text-green-500" />
+                </FadeInSection>
+              </div>
+
+              <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
+                <FadeInSection delay={400}>
+                  <div className="aspect-[4/5] bg-green-100 rounded-3xl overflow-hidden border border-green-200 flex items-center justify-center relative shadow-2xl">
+                    <img src={korakuenImg} className="w-full h-full object-cover" alt="Okayama Korakuen" loading="lazy" decoding="async" />
+                  </div>
+                </FadeInSection>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -699,9 +739,9 @@ export default function App() {
                   }}
                 >
                   <h2 className="flex items-baseline tracking-tighter m-0">
-                    <span className="text-4xl sm:text-6xl md:text-8xl leading-none">Go</span>
-                    <span className="text-xl sm:text-3xl md:text-5xl leading-none ml-1 sm:ml-2 md:ml-3">to</span>
-                    <span className="text-[2.5rem] sm:text-[4.5rem] md:text-9xl leading-none ml-2 sm:ml-3 md:ml-6">OKAYAMA！</span>
+                    <span className="text-[10vw] sm:text-6xl md:text-8xl leading-none">Go</span>
+                    <span className="text-[4.5vw] sm:text-3xl md:text-5xl leading-none ml-1 sm:ml-2 md:ml-3">to</span>
+                    <span className="text-[11vw] sm:text-[4.5rem] md:text-9xl leading-none ml-1 sm:ml-3 md:ml-6">OKAYAMA！</span>
                   </h2>
                   {/* スクリーンショットの下部にある矢印をSVGで再現 */}
                   <svg viewBox="0 0 100 24" className="w-full h-4 sm:h-8 md:h-12 mt-1 sm:mt-2 md:mt-4" preserveAspectRatio="none">
@@ -709,16 +749,6 @@ export default function App() {
                   </svg>
                 </div>
               </div>
-            </FadeInSection>
-
-            <FadeInSection delay={200}>
-              <button
-
-                className="bg-black text-white px-6 py-3 md:px-8 md:py-4 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform duration-300 shadow-xl flex items-center gap-2 mx-auto group"
-              >
-                <Compass className="group-hover:animate-spin-slow w-4 h-4 md:w-6 md:h-6" />
-                旅行プランを見る
-              </button>
             </FadeInSection>
 
             <FadeInSection delay={400}>
@@ -759,14 +789,26 @@ export default function App() {
 
       {/* ボトムナビゲーション (ヒーローセクション外で表示) */}
       <div
-        className={`fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex flex-nowrap items-center justify-center gap-0 sm:gap-2 w-[96%] sm:w-auto max-w-4xl p-1.5 sm:p-2 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
+        className={`fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex items-center justify-center gap-2 sm:gap-4 w-[98%] sm:w-auto max-w-5xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
       >
-        {NAV_ITEMS.map((item) => (
-          <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="flex flex-col items-center justify-center gap-1 sm:gap-1.5 py-2 px-1 sm:px-6 sm:py-2 hover:bg-white/10 rounded-full transition-all group flex-1 sm:flex-none">
-            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${item.color} group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform drop-shadow-md`} />
-            <span className="text-[12px] sm:text-[14px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
+        <div className="h-16 sm:h-20 flex flex-nowrap items-center justify-between sm:justify-center gap-0 sm:gap-2 px-1.5 sm:px-2 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl flex-1 sm:flex-none">
+          {NAV_ITEMS.map((item) => (
+            <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="h-14 sm:h-16 flex flex-col items-center justify-center gap-0.5 sm:gap-1.5 px-1 sm:px-6 hover:bg-white/10 rounded-full transition-all group flex-1 sm:flex-none">
+              <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${item.color} group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform drop-shadow-md`} />
+              <span className="text-[10px] sm:text-[13px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl flex items-center justify-center p-1 sm:p-2">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-full h-full flex items-center justify-center hover:bg-white/10 rounded-full transition-all group"
+            aria-label="トップに戻る"
+          >
+            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 text-white -rotate-90 group-hover:-translate-y-1 transition-transform" />
           </button>
-        ))}
+        </div>
       </div>
 
       {/* フッター */}
