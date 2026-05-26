@@ -52,7 +52,7 @@ const LoadingScreen = React.memo(({ onComplete }) => {
             }}
           />
         </svg>
-        <div className={`text-white font-bold tracking-[0.4em] text-4xl transition-all duration-1000 ${phase >= 2 ? 'opacity-100 translate-y-0 blur-none' : 'opacity-0 translate-y-4 blur-sm'}`}>
+        <div className={`text-white font-bold tracking-[0.4em] pl-[0.4em] text-4xl transition-all duration-1000 ${phase >= 2 ? 'opacity-100 translate-y-0 blur-none' : 'opacity-0 translate-y-4 blur-sm'}`}>
           Find OKAYAMA！
         </div>
       </div>
@@ -528,7 +528,7 @@ export default function App() {
             </FadeInSection>
 
             <FadeInSection delay={250}>
-              <LearnMoreButton onClick={() => setActiveDetail('fruits')} text="果物についてさらに詳しく" colorClass="text-green-500 hover:text-pink-400" className="mb-10 md:mb-16" />
+              <LearnMoreButton onClick={() => setActiveDetail('fruits')} text="果物についてさらに詳しく" colorClass="text-green-600 hover:text-green-500" className="mb-10 md:mb-16" />
             </FadeInSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -622,6 +622,22 @@ export default function App() {
                 </FadeInSection>
               </div>
             </div>
+
+            <FadeInSection delay={500}>
+              <div className="mt-12 md:mt-20 w-full h-64 md:h-96 rounded-[24px] overflow-hidden shadow-2xl border border-neutral-800">
+                <iframe
+                  src="https://maps.google.com/maps?q=岡山城&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Google Map - 岡山城"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                ></iframe>
+              </div>
+            </FadeInSection>
           </div>
         </section>
 
@@ -694,6 +710,22 @@ export default function App() {
               </div>
             </div>
 
+            <FadeInSection delay={500}>
+              <div className="mt-12 md:mt-20 w-full h-64 md:h-96 rounded-[24px] overflow-hidden shadow-xl border border-orange-200">
+                <iframe
+                  src="https://maps.google.com/maps?q=倉敷美観地区&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Google Map - 倉敷美観地区"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                ></iframe>
+              </div>
+            </FadeInSection>
+
             {/* 蒜山高原ブロック */}
             <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 mt-20 md:mt-32">
               <div className="flex-1 text-center md:text-left">
@@ -724,6 +756,22 @@ export default function App() {
                 </FadeInSection>
               </div>
             </div>
+
+            <FadeInSection delay={500}>
+              <div className="mt-12 md:mt-20 w-full h-64 md:h-96 rounded-[24px] overflow-hidden shadow-xl border border-green-200">
+                <iframe
+                  src="https://maps.google.com/maps?q=蒜山高原&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Google Map - 蒜山高原"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                ></iframe>
+              </div>
+            </FadeInSection>
           </div>
         </section>
 
