@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed } from 'lucide-react';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
 import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
-import korakuenImg from 'C:/Users/winim/.gemini/antigravity-ide/brain/f2601acb-e397-483e-a8e7-f11f04f6faba/okayama_korakuen_1779607695430.png';
 import kojimajeansImg from './assets/KojimaJeans.webp';
 import kojimajeansImg2 from './assets/KojimaJeans2.webp';
 import kurashikiImg from './assets/KurashikiBikantiku.webp';
 import kurashikiImg2 from './assets/KurashikiBikantiku2.webp';
+import hiruzenkogen from './assets/Hiruzenkogen.webp';
+import hiruzenkogen2 from './assets/Hiruzenkogen2.webp';
 import himawaribatake from './assets/HimawariBatake.webp';
 import peach from './assets/Peach.webp';
 import muscat from './assets/Muscat.webp';
@@ -34,9 +35,9 @@ const LoadingScreen = React.memo(({ onComplete }) => {
 
   return (
     <div className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000 ${phase === 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-      <div className="relative w-64 h-64 flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-6">
         {/* 岡山県の地形を描画するSVGパス */}
-        <svg viewBox="0 0 200 200" className={`w-60 h-60 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-transform duration-1000 ${phase >= 2 ? 'scale-105' : 'scale-100'}`}>
+        <svg viewBox="0 0 200 200" className={`w-80 h-80 md:w-96 md:h-96 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-transform duration-1000 ${phase >= 2 ? 'scale-105' : 'scale-100'}`}>
           <path
             d="M 35,45 L 45,25 L 70,35 L 105,5 L 120,20 L 140,25 L 160,10 L 165,30 L 190,45 L 180,65 L 195,80 L 165,110 L 185,125 L 155,125 L 155,135 L 140,125 L 130,165 L 115,160 L 115,135 L 90,130 L 80,145 L 65,140 L 45,160 L 35,150 L 55,135 L 30,110 L 35,90 L 20,80 L 35,65 L 25,55 Z"
             fill={phase >= 2 ? "rgba(255, 255, 255, 0.15)" : "rgba(255, 255, 255, 0)"}
@@ -51,8 +52,8 @@ const LoadingScreen = React.memo(({ onComplete }) => {
             }}
           />
         </svg>
-        <div className={`absolute bottom-4 text-white font-bold tracking-[0.4em] text-2xl transition-all duration-1000 ${phase >= 2 ? 'opacity-100 translate-y-0 blur-none' : 'opacity-0 translate-y-4 blur-sm'}`}>
-          OKAYAMA
+        <div className={`text-white font-bold tracking-[0.4em] text-4xl transition-all duration-1000 ${phase >= 2 ? 'opacity-100 translate-y-0 blur-none' : 'opacity-0 translate-y-4 blur-sm'}`}>
+          Find OKAYAMA！
         </div>
       </div>
     </div>
@@ -124,19 +125,19 @@ const DETAIL_DATA = {
     description: "倉敷美観地区は、江戸時代の白壁の屋敷や柳並木が美しい、岡山を代表する観光地です。倉敷川での舟流しや、大原美術館など、歴史とアートが融合したノスタルジックな風景を楽しむことができます。",
     image: kurashikiImg
   },
-  korakuen: {
-    title: "日本三名園、後楽園",
-    description: "岡山藩主・池田綱政が造営した大名庭園。広い芝生や池、築山が織りなす美しい景観は「日本三名園」の一つに数えられ、四季折々の表情で訪れる人々を魅了します。",
-    image: korakuenImg
+  hiruzen: {
+    title: "雄大な自然、蒜山高原",
+    description: "西日本屈指のリゾート地、蒜山（ひるぜん）高原。なだらかな山々と広大な牧草地が広がり、ジャージー牛がのんびりと草を食む牧歌的な風景に癒やされます。サイクリングやキャンプ、そして名物の「ひるぜん焼そば」も外せません。",
+    image: hiruzenkogen2
   }
 };
 
 const NAV_ITEMS = [
-  { id: 'fruits', label: 'FRUITS', icon: Grape, color: 'text-green-400' },
-  { id: 'food', label: 'FOOD', icon: UtensilsCrossed, color: 'text-yellow-300' },
-  { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300' },
-  { id: 'denim', label: 'DENIM', icon: Scissors, color: 'text-blue-300' },
-  { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300' },
+  { id: 'fruits', label: 'FRUITS', icon: Grape, color: 'text-green-400', navHoverColor: 'group-hover:text-green-600' },
+  { id: 'food', label: 'FOOD', icon: UtensilsCrossed, color: 'text-yellow-300', navHoverColor: 'group-hover:text-orange-500' },
+  { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300', navHoverColor: 'group-hover:text-slate-600' },
+  { id: 'denim', label: 'DENIM', icon: Scissors, color: 'text-blue-300', navHoverColor: 'group-hover:text-blue-600' },
+  { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300', navHoverColor: 'group-hover:text-amber-600' },
 ];
 
 const FRUITS_DATA = [
@@ -480,7 +481,7 @@ export default function App() {
                   onClick={() => !showBackgroundInfo && setFocusLayer('middle')}
                 >
                   <Sun className="w-6 h-6 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4" />
-                  晴れの国の魅力
+                  晴れの国を知る
                 </p>
 
                 {/* 各コンテンツへのナビゲーションボタン */}
@@ -508,14 +509,14 @@ export default function App() {
         {/* スクロール連動型コンテンツエリア */}
 
         {/* フルーツセクション */}
-        <section id="fruits" className="py-20 md:py-32 bg-white text-black text-center px-4 relative z-10 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+        <section id="fruits" className="py-20 md:py-32 bg-white text-gray-900 text-center px-4 relative z-10 border-b border-gray-100">
           <div className="max-w-5xl mx-auto">
             <FadeInSection>
               <Grape className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-green-500" />
             </FadeInSection>
 
             <FadeInSection delay={100}>
-              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8">
+              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-gray-900">
                 果物の宝庫
               </h2>
             </FadeInSection>
@@ -533,12 +534,12 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {FRUITS_DATA.map((fruit) => (
                 <FadeInSection key={fruit.title} delay={fruit.delay}>
-                  <div className="bg-white rounded-3xl p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center shadow-sm border border-gray-100 hover:shadow-2xl transition-shadow duration-500 group relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity">
+                  <div className="bg-slate-50 rounded-[24px] p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center shadow-sm border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity duration-500">
                       <img src={fruit.img} className="w-full h-full object-cover" alt={fruit.alt} loading="lazy" decoding="async" />
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 relative z-10 group-hover:text-transparent">{fruit.title}</h3>
-                    <p className="text-base md:text-lg text-gray-700 font-bold mb-4 md:mb-6 relative z-10 group-hover:text-transparent">{fruit.desc}</p>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 relative z-10 text-gray-900 group-hover:text-transparent transition-colors bg-clip-text drop-shadow-sm">{fruit.title}</h3>
+                    <p className="text-base md:text-lg text-gray-700 font-bold mb-4 md:mb-6 relative z-10 group-hover:text-transparent transition-colors bg-clip-text drop-shadow-sm">{fruit.desc}</p>
                   </div>
                 </FadeInSection>
               ))}
@@ -547,20 +548,20 @@ export default function App() {
         </section>
 
         {/* フードセクション */}
-        <section id="food" className="py-20 md:py-32 bg-[#FFF9F0] text-amber-950 text-center px-4 relative z-10">
+        <section id="food" className="py-20 md:py-32 bg-[#FFF9F0] text-gray-900 text-center px-4 relative z-10 border-b border-orange-100">
           <div className="max-w-6xl mx-auto">
             <FadeInSection>
               <UtensilsCrossed className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-orange-500" />
             </FadeInSection>
 
             <FadeInSection delay={100}>
-              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-700">
+              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 text-gray-900">
                 絶品の、<br className="md:hidden" />岡山グルメ
               </h2>
             </FadeInSection>
 
             <FadeInSection delay={200}>
-              <p className="text-base sm:text-xl md:text-2xl text-amber-900/80 mb-6 font-light leading-relaxed">
+              <p className="text-base sm:text-xl md:text-2xl text-gray-600 mb-6 font-light leading-relaxed">
                 一度食べたら忘れられない。<br />
                 五感を刺激する、こだわりのローカルフード。
               </p>
@@ -573,9 +574,9 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 md:gap-6 h-auto md:h-[600px]">
               {FOOD_DATA.map((food) => (
                 <FadeInSection key={food.title} delay={food.delay} className={`${food.colSpan} ${food.rowSpan} h-64 md:h-full`}>
-                  <div className="bg-amber-100/30 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 group relative w-full h-full flex items-end border border-amber-900/5">
+                  <div className="bg-orange-100/50 rounded-[24px] overflow-hidden shadow-sm border border-orange-900/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group relative w-full h-full flex items-end">
                     <img src={food.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt={food.alt} loading="lazy" decoding="async" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
                     <div className="relative z-10 p-6 md:p-8 w-full text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       <h3 className="text-2xl md:text-3xl font-bold mb-2 text-white drop-shadow-md">{food.title}</h3>
                       <p className="text-sm md:text-base text-white/90 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{food.desc}</p>
@@ -597,14 +598,14 @@ export default function App() {
                 </FadeInSection>
 
                 <FadeInSection delay={100}>
-                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
+                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-white">
                     美しき漆黒
                   </h2>
                 </FadeInSection>
 
                 <FadeInSection delay={200}>
                   <p className="text-base md:text-xl text-gray-400 mb-6 md:mb-8 font-light leading-relaxed">
-
+                    烏城とも呼ばれる堂々たる風格。
                   </p>
                 </FadeInSection>
 
@@ -615,7 +616,7 @@ export default function App() {
 
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
-                  <div className="aspect-[4/5] bg-neutral-900 rounded-3xl overflow-hidden border border-neutral-800 flex items-center justify-center relative shadow-2xl">
+                  <div className="aspect-[4/5] bg-neutral-900 rounded-[24px] overflow-hidden border border-neutral-800 flex items-center justify-center relative shadow-2xl hover:-translate-y-1 transition-transform duration-500">
                     <img src={okayamaCastleImg} className="w-full h-full object-cover" alt="Okayama Castle" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
@@ -638,7 +639,7 @@ export default function App() {
             </FadeInSection>
 
             <FadeInSection delay={200}>
-              <p className="text-base sm:text-xl md:text-2xl text-blue-200/80 mb-6 font-light">
+              <p className="text-base sm:text-xl md:text-2xl text-blue-200/80 mb-6 font-light leading-relaxed">
                 職人の魂が宿る、児島デニム。<br />
                 色落ちすらも、美しいアートになる。
               </p>
@@ -649,7 +650,7 @@ export default function App() {
             </FadeInSection>
 
             <FadeInSection delay={300}>
-              <div className="w-full h-48 sm:h-64 md:h-96 bg-blue-900/30 rounded-3xl border border-blue-500/20 flex items-center justify-center backdrop-blur-sm overflow-hidden relative">
+              <div className="w-full h-48 sm:h-64 md:h-96 bg-blue-900/30 rounded-[24px] border border-blue-500/20 shadow-2xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center backdrop-blur-sm overflow-hidden relative">
                 <img src={kojimajeansImg} className="w-full h-full object-cover" alt="Kojima Jeans" loading="lazy" decoding="async" />
               </div>
             </FadeInSection>
@@ -657,7 +658,7 @@ export default function App() {
         </section>
 
         {/* 旅行セクション */}
-        <section id="tourism" className="py-20 md:py-40 bg-orange-50 text-black px-4 relative overflow-hidden">
+        <section id="tourism" className="py-20 md:py-40 bg-orange-50 text-gray-900 px-4 relative overflow-hidden border-b border-orange-100">
           <div className="max-w-5xl mx-auto relative z-10">
             <div className="flex flex-col md:flex-row-reverse items-center gap-10 md:gap-16">
               <div className="flex-1 text-center md:text-left">
@@ -666,13 +667,13 @@ export default function App() {
                 </FadeInSection>
 
                 <FadeInSection delay={100}>
-                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
+                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-gray-900">
                     時を忘れる、<br />白壁の町並み
                   </h2>
                 </FadeInSection>
 
                 <FadeInSection delay={200}>
-                  <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 font-light leading-relaxed">
+                  <p className="text-base md:text-xl text-gray-700 mb-6 md:mb-8 font-light leading-relaxed">
                     倉敷美観地区。<br />
                     柳が揺れる川沿いを歩けば、江戸の情緒が蘇る。<br />
                     歴史とアートが交差する、ノスタルジックな癒やしの時間。
@@ -686,39 +687,39 @@ export default function App() {
 
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
-                  <div className="aspect-[4/5] bg-orange-100 rounded-3xl overflow-hidden border border-orange-200 flex items-center justify-center relative shadow-2xl">
+                  <div className="aspect-[4/5] bg-orange-100/50 rounded-[24px] overflow-hidden border border-orange-200 shadow-xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center relative">
                     <img src={kurashikiImg2} className="w-full h-full object-cover" alt="Kurashiki Bikan Historical Quarter" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
             </div>
 
-            {/* 後楽園ブロック */}
+            {/* 蒜山高原ブロック */}
             <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 mt-20 md:mt-32">
               <div className="flex-1 text-center md:text-left">
                 <FadeInSection delay={100}>
-                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight">
-                    四季が彩る、<br />天下の名園
+                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-gray-900">
+                    緑あふれる、<br />雄大な高原
                   </h2>
                 </FadeInSection>
 
                 <FadeInSection delay={200}>
-                  <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 font-light leading-relaxed">
-                    日本三名園のひとつ、岡山後楽園。<br />
-                    広大な芝生、池、そして茶室。<br />
-                    岡山城を借景にした、息を呑むような大名庭園の美しさ。
+                  <p className="text-base md:text-xl text-gray-700 mb-6 md:mb-8 font-light leading-relaxed">
+                    西日本を代表するリゾート地、蒜山高原。<br />
+                    どこまでも続く緑の牧草地とジャージー牛たち。<br />
+                    大自然の息吹を感じながら、心安らぐひとときを。
                   </p>
                 </FadeInSection>
 
                 <FadeInSection delay={300}>
-                  <LearnMoreButton onClick={() => setActiveDetail('korakuen')} text="岡山後楽園についてさらに詳しく" colorClass="text-green-600 hover:text-green-500" />
+                  <LearnMoreButton onClick={() => setActiveDetail('hiruzen')} text="蒜山高原についてさらに詳しく" colorClass="text-green-600 hover:text-green-500" />
                 </FadeInSection>
               </div>
 
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
-                  <div className="aspect-[4/5] bg-green-100 rounded-3xl overflow-hidden border border-green-200 flex items-center justify-center relative shadow-2xl">
-                    <img src={korakuenImg} className="w-full h-full object-cover" alt="Okayama Korakuen" loading="lazy" decoding="async" />
+                  <div className="aspect-[4/5] bg-green-50/50 rounded-[24px] overflow-hidden border border-green-200 shadow-xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center relative">
+                    <img src={hiruzenkogen} className="w-full h-full object-cover" alt="Hiruzen Kogen" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
@@ -789,31 +790,31 @@ export default function App() {
 
       {/* ボトムナビゲーション (ヒーローセクション外で表示) */}
       <div
-        className={`fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex items-center justify-center gap-2 sm:gap-4 w-[98%] sm:w-auto max-w-5xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
+        className={`fixed bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex items-center justify-center gap-2 sm:gap-4 w-[98%] sm:w-auto max-w-5xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
       >
-        <div className="h-16 sm:h-20 flex flex-nowrap items-center justify-between sm:justify-center gap-0 sm:gap-2 px-1.5 sm:px-2 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl flex-1 sm:flex-none">
+        <div className="h-16 sm:h-20 flex flex-nowrap items-center justify-between sm:justify-center gap-0 sm:gap-2 px-1.5 sm:px-2 bg-white/90 backdrop-blur-xl border border-[#E9E9E7] rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex-1 sm:flex-none">
           {NAV_ITEMS.map((item) => (
-            <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="h-14 sm:h-16 flex flex-col items-center justify-center gap-0.5 sm:gap-1.5 px-1 sm:px-6 hover:bg-white/10 rounded-full transition-all group flex-1 sm:flex-none">
-              <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${item.color} group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform drop-shadow-md`} />
-              <span className="text-[10px] sm:text-[13px] font-bold tracking-widest text-white truncate drop-shadow-md">{item.label}</span>
+            <button key={`bottom-${item.id}`} onClick={() => scrollToSection(item.id)} className="h-14 sm:h-16 flex flex-col items-center justify-center gap-0.5 sm:gap-1.5 px-1 sm:px-6 hover:bg-[#F7F7F5] rounded-full transition-all group flex-1 sm:flex-none">
+              <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-gray-400 ${item.navHoverColor} group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300`} />
+              <span className="text-[10px] sm:text-[13px] font-bold tracking-widest text-gray-400 group-hover:text-gray-900 transition-colors duration-300 truncate">{item.label}</span>
             </button>
           ))}
         </div>
 
-        <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-black/50 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl flex items-center justify-center p-1 sm:p-2">
+        <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-white/90 backdrop-blur-xl border border-[#E9E9E7] rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center p-1 sm:p-2">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-full h-full flex items-center justify-center hover:bg-white/10 rounded-full transition-all group"
+            className="w-full h-full flex items-center justify-center hover:bg-[#F7F7F5] rounded-full transition-all group"
             aria-label="トップに戻る"
           >
-            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 text-white -rotate-90 group-hover:-translate-y-1 transition-transform" />
+            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 text-[#37352F] -rotate-90 group-hover:-translate-y-1 transition-transform" />
           </button>
         </div>
       </div>
 
       {/* フッター */}
-      <footer className="bg-gray-100 text-gray-500 pt-8 pb-28 md:pt-12 md:pb-32 text-xs md:text-sm text-center border-t border-gray-200 px-4">
-        <p>&copy; 2026 Waterfall All rights reserved.</p>
+      <footer className="bg-[#F7F7F5] text-[#787774] pt-8 pb-28 md:pt-12 md:pb-32 text-xs md:text-sm text-center border-t border-[#E9E9E7] px-4">
+        <p>&copy; 2026 WaterfallG1024 All rights reserved.</p>
       </footer>
     </div>
   );
