@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed } from 'lucide-react';
+import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed, CloudSun, Calendar, Thermometer, ArrowRight, Droplets, Umbrella } from 'lucide-react';
+import momotaro from './assets/Momotaro.webp';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
 import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
 import kojimajeansImg from './assets/KojimaJeans.webp';
@@ -19,7 +20,7 @@ import hiruzenYakisobaImg from './assets/HiruzenYakisoba.webp';
 
 // アプリケーション起動時のSVGローディングアニメーション制御
 const LoadingScreen = React.memo(({ onComplete }) => {
-  const [phase, setPhase] = useState(0);
+const [phase, setPhase] = useState(0);
 
   useEffect(() => {
     // フェーズ1: 線の描画を開始 (0秒〜2秒)
@@ -129,6 +130,11 @@ const DETAIL_DATA = {
     title: "雄大な自然、蒜山高原",
     description: "西日本屈指のリゾート地、蒜山（ひるぜん）高原。なだらかな山々と広大な牧草地が広がり、ジャージー牛がのんびりと草を食む牧歌的な風景に癒やされます。サイクリングやキャンプ、そして名物の「ひるぜん焼そば」も外せません。",
     image: hiruzenkogen2
+  },
+  momotaro: {
+    title: "鬼退治の舞台、吉備の国",
+    description: "昔話「桃太郎」のモデルとなったとされるのが、古代吉備国に伝わる吉備津彦命（きびつひこのみこと）による温羅（うら）退治の伝説です。吉備津神社や鬼ノ城など、伝説にまつわる史跡が今も県内各地に点在しており、古代ロマンを感じることができます。",
+    image: okayamaCastleImg
   }
 };
 
@@ -281,12 +287,90 @@ export default function App() {
   const [activeDetail, setActiveDetail] = useState(null);
   const [showBackgroundInfo, setShowBackgroundInfo] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
+
+  // 天気データ用の状態（days: 14日分の日別集計、bestStartIndex: おすすめ3日間の開始位置）
+  const [weatherRecommendation, setWeatherRecommendation] = useState({ loading: true, dateRange: '', description: '', data: null, days: [], bestStartIndex: -1 });
   const sceneRef = useRef(null);
   const heroRef = useRef(null);
   const requestRef = useRef();
 
   const target = useRef({ x: 0, y: 0 });
   const current = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    // 岡山市の天気データを取得
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.65&longitude=133.9333&hourly=temperature_2m,precipitation_probability,precipitation,rain&forecast_days=14');
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+
+        if (!data || !data.hourly || !data.hourly.time) {
+          throw new Error('Invalid data structure from API');
+        }
+
+        const hourly = data.hourly;
+        const days = [];
+        // 24時間ごとに1日のデータとして集計
+        for (let i = 0; i < hourly.time.length; i += 24) {
+          let dailyProbSum = 0;
+          let maxTemp = -999;
+          // 配列外アクセスを防ぐため、jの範囲も制限する
+          for (let j = 0; j < 24 && i + j < hourly.time.length; j++) {
+            dailyProbSum += hourly.precipitation_probability[i + j] || 0;
+            if (hourly.temperature_2m[i + j] > maxTemp) {
+              maxTemp = hourly.temperature_2m[i + j];
+            }
+          }
+          days.push({
+            dateStr: hourly.time[i], // 例: "2026-05-27T00:00"
+            avgProb: dailyProbSum / 24,
+            maxTemp: maxTemp
+          });
+        }
+
+        let bestStartIndex = -1;
+        let minAvgProb = 101; // 最小の降水確率（3日間平均）
+
+        // 3日間の連続で一番降水確率が低い期間を探す（平均40%以下を条件とする）
+        for (let i = 0; i < days.length - 2; i++) {
+          const threeDaysProb = (days[i].avgProb + days[i + 1].avgProb + days[i + 2].avgProb) / 3;
+          if (threeDaysProb < minAvgProb && threeDaysProb <= 40) {
+            minAvgProb = threeDaysProb;
+            bestStartIndex = i;
+          }
+        }
+
+        if (bestStartIndex !== -1) {
+          const startDateStr = days[bestStartIndex].dateStr;
+          const endDateStr = days[bestStartIndex + 2].dateStr;
+
+          // 文字列 "YYYY-MM-DDThh:mm" から "M月D日" を生成
+          const formatDate = (dateStr) => {
+            const parts = dateStr.split('T')[0].split('-');
+            return `${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
+          };
+
+          const avgMaxTemp = Math.round((days[bestStartIndex].maxTemp + days[bestStartIndex + 1].maxTemp + days[bestStartIndex + 2].maxTemp) / 3);
+
+          setWeatherRecommendation({
+            loading: false,
+            dateRange: `${formatDate(startDateStr)} 〜 ${formatDate(endDateStr)}`,
+            description: minAvgProb <= 20 ? `降水確率が低く、最高気温は約${avgMaxTemp}℃の予想です。絶好の旅行日和になります！` : `雨の心配は少なく、最高気温は約${avgMaxTemp}℃の予想です。`,
+            data: data,
+            days: days,
+            bestStartIndex: bestStartIndex
+          });
+        } else {
+          setWeatherRecommendation({ loading: false, dateRange: '直近2週間', description: '天気の変動が大きいため、雨具の準備をおすすめします。', data: data, days: days, bestStartIndex: -1 });
+        }
+      } catch (err) {
+        console.error("Weather API error:", err);
+        setWeatherRecommendation({ loading: false, dateRange: '取得エラー', description: '天気情報の取得に失敗しました。少し時間をおいて再度お試しください。', data: null });
+      }
+    };
+    fetchWeather();
+  }, []);
 
   useEffect(() => {
     // マウスカーソルの位置からパララックスの目標角度を計算
@@ -590,6 +674,43 @@ export default function App() {
 
         {/* 歴史セクション */}
         <section id="history" className="py-20 md:py-40 bg-black text-white px-4 relative overflow-hidden">
+          {/* 桃太郎伝説ブロック */}
+          <div className="max-w-5xl mx-auto relative z-10 mb-20 md:mb-32">
+            <div className="flex flex-col md:flex-row-reverse items-center gap-10 md:gap-16">
+              <div className="flex-1 text-center md:text-left">
+                <FadeInSection>
+                  <Castle className="w-10 h-10 md:w-12 md:h-12 mx-auto md:mx-0 mb-4 md:mb-6 text-[#FF004D]" />
+                </FadeInSection>
+
+                <FadeInSection delay={100}>
+                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-white">
+                    桃太郎伝説の地
+                  </h2>
+                </FadeInSection>
+
+                <FadeInSection delay={200}>
+                  <p className="text-base md:text-xl text-gray-400 mb-6 md:mb-8 font-light leading-relaxed">
+                    日本中が知る英雄、桃太郎。<br />
+                    そのルーツとされる吉備津彦命（きびつひこのみこと）と<br className="hidden md:block" />鬼神・温羅（うら）の戦いの舞台。<br />
+                    神話と歴史が交差する、神秘的な物語がここから始まります。
+                  </p>
+                </FadeInSection>
+
+                <FadeInSection delay={300}>
+                  <LearnMoreButton onClick={() => setActiveDetail('momotaro')} text="桃太郎伝説についてさらに詳しく" colorClass="text-[#FF004D] hover:text-red-400" />
+                </FadeInSection>
+              </div>
+
+              <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
+                <FadeInSection delay={400}>
+                  <div className="aspect-[4/5] bg-neutral-900 rounded-[24px] overflow-hidden border border-neutral-800 flex items-center justify-center relative shadow-2xl hover:-translate-y-1 transition-transform duration-500">
+                    <img src={momotaro} className="w-full h-full object-cover" alt="Okayama Castle" loading="lazy" decoding="async" />
+                  </div>
+                </FadeInSection>
+              </div>
+            </div>
+          </div>
+
           <div className="max-w-5xl mx-auto relative z-10">
             <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
               <div className="flex-1 text-center md:text-left">
@@ -729,6 +850,10 @@ export default function App() {
             {/* 蒜山高原ブロック */}
             <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 mt-20 md:mt-32">
               <div className="flex-1 text-center md:text-left">
+                <FadeInSection>
+                  <Compass className="w-10 h-10 md:w-12 md:h-12 mx-auto md:mx-0 mb-4 md:mb-6 text-green-600" />
+                </FadeInSection>
+
                 <FadeInSection delay={100}>
                   <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-gray-900">
                     緑あふれる、<br />雄大な高原
@@ -770,6 +895,128 @@ export default function App() {
                   title="Google Map - 蒜山高原"
                   sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
                 ></iframe>
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
+
+
+
+        {/* 天気・旅行提案セクション */}
+        <section id="weather" className="py-20 md:py-40 bg-[#F4F9FF] text-gray-900 px-4 relative overflow-hidden">
+          <div className="max-w-5xl mx-auto relative z-10">
+            <FadeInSection>
+              <div className="text-center mb-12 md:mb-16">
+                <CloudSun className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 md:mb-6 text-blue-500" />
+                <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-tight text-gray-900">最適な旅行のタイミング</h2>
+                <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 font-light leading-relaxed">直近14日間の天気予報から<br className="md:hidden" />ベストな日程をご提案します。</p>
+              </div>
+            </FadeInSection>
+
+            <FadeInSection delay={200}>
+              <div className="bg-white/80 backdrop-blur-sm rounded-[24px] p-6 md:p-12 shadow-sm border border-blue-100 relative">
+                {weatherRecommendation.loading ? (
+                  <div className="animate-pulse flex flex-col items-center justify-center py-10">
+                    <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+                    <p className="text-gray-500 font-bold tracking-widest">14日間の天気データを解析中...</p>
+                  </div>
+                ) : (
+                  <div className="relative z-10">
+                    {/* おすすめ日程ヘッダー */}
+                    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 border-b border-blue-100 pb-8">
+                      <div>
+                        <h3 className="text-2xl md:text-4xl font-bold text-gray-900 flex items-center flex-wrap gap-3">
+                          <Calendar className="w-8 h-8 text-blue-500" />
+                          おすすめ日程: <span className="text-blue-600">{weatherRecommendation.dateRange}</span>
+                        </h3>
+                      </div>
+                      <div className="flex items-start gap-3 bg-blue-50/50 px-5 py-4 rounded-xl border border-blue-50">
+                        <Thermometer className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm md:text-base font-medium leading-relaxed">
+                          {weatherRecommendation.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 14日間タイムライン - 降水確率バーチャート */}
+                    {weatherRecommendation.days.length > 0 && (
+                      <div className="mb-6">
+                        {/* 凡例 */}
+                        <div className="flex items-center gap-4 md:gap-6 mb-4 text-xs md:text-sm text-gray-500">
+                          <span className="flex items-center gap-1.5"><Droplets className="w-3.5 h-3.5 text-blue-400" />降水確率</span>
+                          <span className="flex items-center gap-1.5"><Thermometer className="w-3.5 h-3.5 text-orange-400" />最高気温</span>
+                          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-500/20 border-2 border-blue-500 inline-block"></span>おすすめ期間</span>
+                        </div>
+
+                        {/* バーチャート */}
+                        <div className="flex items-end gap-[3px] sm:gap-1.5 md:gap-2 w-full" style={{ height: '180px' }}>
+                          {weatherRecommendation.days.map((day, idx) => {
+                            const isRecommended = weatherRecommendation.bestStartIndex !== -1 &&
+                              idx >= weatherRecommendation.bestStartIndex &&
+                              idx <= weatherRecommendation.bestStartIndex + 2;
+                            const prob = Math.round(day.avgProb);
+                            const barHeight = Math.max(prob, 4); // 最低4%の高さを確保
+                            const dateParts = day.dateStr.split('T')[0].split('-');
+                            const month = parseInt(dateParts[1], 10);
+                            const date = parseInt(dateParts[2], 10);
+                            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][new Date(day.dateStr).getDay()];
+                            const isWeekend = dayOfWeek === '土' || dayOfWeek === '日';
+                            const isToday = idx === 0;
+
+                            // 降水確率に応じたバーの色
+                            const barColor = isRecommended
+                              ? 'bg-gradient-to-t from-blue-500 to-blue-400'
+                              : prob <= 20 ? 'bg-gradient-to-t from-sky-300 to-sky-200'
+                              : prob <= 50 ? 'bg-gradient-to-t from-blue-300 to-blue-200'
+                              : 'bg-gradient-to-t from-blue-400 to-blue-300';
+
+                            return (
+                              <div key={idx} className="flex-1 flex flex-col items-center justify-end h-full group relative">
+                                {/* ホバー時のツールチップ */}
+                                <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] md:text-xs px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-lg">
+                                  <div className="font-bold">{month}/{date}({dayOfWeek})</div>
+                                  <div>☔ {prob}% ／ 🌡️ {Math.round(day.maxTemp)}℃</div>
+                                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                </div>
+
+                                {/* 気温ラベル（デスクトップのみ） */}
+                                <span className="hidden md:block text-[10px] text-orange-500 font-bold mb-1">{Math.round(day.maxTemp)}°</span>
+
+                                {/* 降水確率バー */}
+                                <div
+                                  className={`w-full rounded-t-md ${barColor} ${isRecommended ? 'ring-2 ring-blue-500 ring-offset-1 shadow-lg shadow-blue-200' : ''} transition-all duration-300 group-hover:brightness-110 relative`}
+                                  style={{ height: `${barHeight}%`, minHeight: '6px' }}
+                                >
+                                {/* おすすめ期間マーク（削除済） */}
+                                </div>
+
+                                {/* 日付ラベル */}
+                                <div className={`mt-1.5 md:mt-2 text-center leading-none ${isRecommended ? 'font-black' : 'font-medium'}`}>
+                                  <div className={`text-[10px] md:text-xs ${isToday ? 'text-blue-600 font-black' : isRecommended ? 'text-blue-600' : 'text-gray-500'}`}>
+                                    {isToday ? '今日' : `${date}`}
+                                  </div>
+                                  <div className={`text-[9px] md:text-[10px] mt-0.5 ${isWeekend ? (dayOfWeek === '日' ? 'text-red-400' : 'text-blue-400') : 'text-gray-400'}`}>
+                                    {dayOfWeek}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* おすすめ期間のハイライトラベル（削除済） */}
+                      </div>
+                    )}
+
+                    {/* フッターアクション */}
+                    <div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
+                      <p className="text-xs text-gray-400 flex items-center gap-1">
+                        <CloudSun className="w-3.5 h-3.5" />
+                        データ取得：Open-Meteo API
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </FadeInSection>
           </div>
