@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed, CloudSun, Calendar, Thermometer, ArrowRight, Droplets, Umbrella } from 'lucide-react';
+import { Sun, Grape, Castle, Scissors, ChevronRight, Compass, X, Image as ImageIcon, UtensilsCrossed, CloudSun, Thermometer } from 'lucide-react';
 import momotaro from './assets/Momotaro.webp';
+import kibitsuShrine from './assets/KibitsuShrine.webp';
 import okayamaCastleImg from './assets/OkayamaCastle.webp';
 import okayamaCastleImg2 from './assets/OkayamaCastle2.webp';
 import kojimajeansImg from './assets/KojimaJeans.webp';
@@ -102,14 +103,19 @@ const FadeInSection = React.memo(({ children, delay = 0, className = '' }) => {
 // 各セクションの詳細モーダル表示用データ定義
 const DETAIL_DATA = {
   fruits: {
-    title: "フルーツの宝庫",
+    title: "はじける果実",
     description: "岡山県は「フルーツ王国」として知られています。温暖な気候と豊かな自然が、清水白桃やマスカット・オブ・アレキサンドリア、ピオーネなど、最高品質の果物を育みます。特に白桃は、袋掛け栽培により美しい白さと上品な甘さを実現しています。",
     image: pione
   },
   food: {
-    title: "絶品の、岡山グルメ。",
+    title: "B級グルメの宝庫",
     description: "ばら寿司やデミカツ丼など、岡山ならではの個性豊かなご当地グルメ。B級グルメから伝統的な味まで、訪れる人々を虜にする豊かな食文化がここにあります。",
     image: barazushiImg
+  },
+  momotaro: {
+    title: "桃太郎伝説の舞台、吉備の国",
+    description: "昔話「桃太郎」のモデルとなったとされるのが、古代吉備国に伝わる吉備津彦命（きびつひこのみこと）による温羅（うら）退治の伝説です。吉備津神社や鬼ノ城など、伝説にまつわる史跡が今も県内各地に点在しており、古代ロマンを感じることができます。",
+    image: kibitsuShrine
   },
   history: {
     title: "漆黒の城、岡山城",
@@ -117,7 +123,7 @@ const DETAIL_DATA = {
     image: okayamaCastleImg2
   },
   denim: {
-    title: "世界に誇る児島デニム",
+    title: "世界に誇る児島ジーンズ",
     description: "倉敷市児島地区は「国産ジーンズ発祥の地」として知られ、現在でも世界中のアパレルブランドから高い評価を受けています。藍染めの技術から縫製、ダメージ加工に至るまで、熟練の職人たちが手作業で仕上げるデニムはまさに芸術品です。",
     image: kojimajeansImg2
   },
@@ -130,11 +136,6 @@ const DETAIL_DATA = {
     title: "雄大な自然、蒜山高原",
     description: "西日本屈指のリゾート地、蒜山（ひるぜん）高原。なだらかな山々と広大な牧草地が広がり、ジャージー牛がのんびりと草を食む牧歌的な風景に癒やされます。サイクリングやキャンプ、そして名物の「ひるぜん焼そば」も外せません。",
     image: hiruzenkogen2
-  },
-  momotaro: {
-    title: "鬼退治の舞台、吉備の国",
-    description: "昔話「桃太郎」のモデルとなったとされるのが、古代吉備国に伝わる吉備津彦命（きびつひこのみこと）による温羅（うら）退治の伝説です。吉備津神社や鬼ノ城など、伝説にまつわる史跡が今も県内各地に点在しており、古代ロマンを感じることができます。",
-    image: okayamaCastleImg
   }
 };
 
@@ -151,14 +152,14 @@ const FRUITS_DATA = [
     title: '白桃',
     desc: 'とろけるような柔らかさと、芳醇な甘い香り。',
     img: peach,
-    alt: 'Peach bg',
+    alt: '白桃',
     delay: 300
   },
   {
     title: 'マスカット',
     desc: '晴天の多さを活かした高い糖度、そして皮ごと食べられる一粒。',
     img: muscat,
-    alt: 'Muscat bg',
+    alt: 'マスカット',
     delay: 400
   }
 ];
@@ -168,7 +169,7 @@ const FOOD_DATA = [
     title: '岡山ばら寿司',
     desc: '瀬戸内の海の幸と旬の野菜を散りばめた贅沢な郷土料理。',
     img: barazushiImg,
-    alt: 'Okayama Barazushi',
+    alt: '岡山ばら寿司',
     delay: 300,
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-2'
@@ -177,7 +178,7 @@ const FOOD_DATA = [
     title: 'デミカツ丼',
     desc: '濃厚デミグラスソースの洋食カツ丼。',
     img: demikatsuDonImg,
-    alt: 'Demi Katsudon',
+    alt: 'デミカツ丼',
     delay: 400,
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1'
@@ -186,7 +187,7 @@ const FOOD_DATA = [
     title: 'ひるぜん焼そば',
     desc: '濃厚な味噌ベースの甘辛ダレと鶏肉が絶妙。',
     img: hiruzenYakisobaImg,
-    alt: 'Hiruzen Yakisoba',
+    alt: 'ひるぜん焼そば',
     delay: 500,
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1'
@@ -195,7 +196,7 @@ const FOOD_DATA = [
     title: '日生カキオコ',
     desc: '旨味たっぷり、牡蠣のお好み焼き。',
     img: hinaseKakiokoImg,
-    alt: 'Hinase Kakioko',
+    alt: '日生カキオコ',
     delay: 600,
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1'
@@ -289,7 +290,7 @@ export default function App() {
   const [isHeroVisible, setIsHeroVisible] = useState(true);
 
   // 天気データ用の状態（days: 14日分の日別集計、bestStartIndex: おすすめ3日間の開始位置）
-  const [weatherRecommendation, setWeatherRecommendation] = useState({ loading: true, dateRange: '', description: '', data: null, days: [], bestStartIndex: -1 });
+  const [weatherRecommendation, setWeatherRecommendation] = useState({ loading: true, dateRange: '', description: '', bestStartIndex: -1, avgProb: 0, avgMaxTemp: 0 });
   const sceneRef = useRef(null);
   const heroRef = useRef(null);
   const requestRef = useRef();
@@ -313,18 +314,19 @@ export default function App() {
         const days = [];
         // 24時間ごとに1日のデータとして集計
         for (let i = 0; i < hourly.time.length; i += 24) {
-          let dailyProbSum = 0;
+          let maxProb = 0;
           let maxTemp = -999;
           // 配列外アクセスを防ぐため、jの範囲も制限する
           for (let j = 0; j < 24 && i + j < hourly.time.length; j++) {
-            dailyProbSum += hourly.precipitation_probability[i + j] || 0;
+            const prob = hourly.precipitation_probability[i + j] || 0;
+            if (prob > maxProb) maxProb = prob;
             if (hourly.temperature_2m[i + j] > maxTemp) {
               maxTemp = hourly.temperature_2m[i + j];
             }
           }
           days.push({
             dateStr: hourly.time[i], // 例: "2026-05-27T00:00"
-            avgProb: dailyProbSum / 24,
+            maxProb: maxProb, // その日の最大降水確率
             maxTemp: maxTemp
           });
         }
@@ -332,11 +334,11 @@ export default function App() {
         let bestStartIndex = -1;
         let minAvgProb = 101; // 最小の降水確率（3日間平均）
 
-        // 3日間の連続で一番降水確率が低い期間を探す（平均40%以下を条件とする）
+        // 3日間の連続で一番降水確率が低い期間を探す（3日間の最大値が50%以下を条件とする）
         for (let i = 0; i < days.length - 2; i++) {
-          const threeDaysProb = (days[i].avgProb + days[i + 1].avgProb + days[i + 2].avgProb) / 3;
-          if (threeDaysProb < minAvgProb && threeDaysProb <= 40) {
-            minAvgProb = threeDaysProb;
+          const threeDaysMaxProb = Math.max(days[i].maxProb, days[i + 1].maxProb, days[i + 2].maxProb);
+          if (threeDaysMaxProb < minAvgProb && threeDaysMaxProb <= 50) {
+            minAvgProb = threeDaysMaxProb;
             bestStartIndex = i;
           }
         }
@@ -357,16 +359,16 @@ export default function App() {
             loading: false,
             dateRange: `${formatDate(startDateStr)} 〜 ${formatDate(endDateStr)}`,
             description: minAvgProb <= 20 ? `降水確率が低く、最高気温は約${avgMaxTemp}℃の予想です。絶好の旅行日和になります！` : `雨の心配は少なく、最高気温は約${avgMaxTemp}℃の予想です。`,
-            data: data,
-            days: days,
-            bestStartIndex: bestStartIndex
+            bestStartIndex: bestStartIndex,
+            avgProb: Math.round(minAvgProb),
+            avgMaxTemp: avgMaxTemp
           });
         } else {
-          setWeatherRecommendation({ loading: false, dateRange: '直近2週間', description: '天気の変動が大きいため、雨具の準備をおすすめします。', data: data, days: days, bestStartIndex: -1 });
+          setWeatherRecommendation({ loading: false, dateRange: '直近2週間', description: '天気の変動が大きいため、雨具の準備をおすすめします。', bestStartIndex: -1, avgProb: 0, avgMaxTemp: 0 });
         }
       } catch (err) {
         console.error("Weather API error:", err);
-        setWeatherRecommendation({ loading: false, dateRange: '取得エラー', description: '天気情報の取得に失敗しました。少し時間をおいて再度お試しください。', data: null });
+        setWeatherRecommendation({ loading: false, dateRange: '取得エラー', description: '天気情報の取得に失敗しました。少し時間をおいて再度お試しください。', bestStartIndex: -1, avgProb: 0, avgMaxTemp: 0 });
       }
     };
     fetchWeather();
@@ -618,12 +620,13 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {FRUITS_DATA.map((fruit) => (
                 <FadeInSection key={fruit.title} delay={fruit.delay}>
-                  <div className="bg-slate-50 rounded-[24px] p-6 md:p-8 h-80 md:h-96 flex flex-col items-center justify-center shadow-sm border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-30 group-hover:opacity-80 transition-opacity duration-500">
-                      <img src={fruit.img} className="w-full h-full object-cover" alt={fruit.alt} loading="lazy" decoding="async" />
+                  <div className="bg-slate-50 rounded-[24px] overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group relative w-full h-80 md:h-96 flex items-end">
+                    <img src={fruit.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt={fruit.alt} loading="lazy" decoding="async" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500" />
+                    <div className="relative z-10 p-6 md:p-8 w-full text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <h3 className="text-3xl md:text-4xl font-bold mb-2 text-white drop-shadow-md">{fruit.title}</h3>
+                      <p className="text-base md:text-lg text-white/90 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{fruit.desc}</p>
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 relative z-10 text-gray-900 group-hover:text-transparent transition-colors bg-clip-text drop-shadow-sm">{fruit.title}</h3>
-                    <p className="text-base md:text-lg text-gray-700 font-bold mb-4 md:mb-6 relative z-10 group-hover:text-transparent transition-colors bg-clip-text drop-shadow-sm">{fruit.desc}</p>
                   </div>
                 </FadeInSection>
               ))}
@@ -704,7 +707,7 @@ export default function App() {
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
                   <div className="aspect-[4/5] bg-neutral-900 rounded-[24px] overflow-hidden border border-neutral-800 flex items-center justify-center relative shadow-2xl hover:-translate-y-1 transition-transform duration-500">
-                    <img src={momotaro} className="w-full h-full object-cover" alt="Okayama Castle" loading="lazy" decoding="async" />
+                    <img src={momotaro} className="w-full h-full object-cover" alt="桃太郎" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
@@ -738,7 +741,7 @@ export default function App() {
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
                   <div className="aspect-[4/5] bg-neutral-900 rounded-[24px] overflow-hidden border border-neutral-800 flex items-center justify-center relative shadow-2xl hover:-translate-y-1 transition-transform duration-500">
-                    <img src={okayamaCastleImg} className="w-full h-full object-cover" alt="Okayama Castle" loading="lazy" decoding="async" />
+                    <img src={okayamaCastleImg} className="w-full h-full object-cover" alt="岡山城" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
@@ -777,7 +780,7 @@ export default function App() {
 
             <FadeInSection delay={200}>
               <p className="text-base sm:text-xl md:text-2xl text-blue-200/80 mb-6 font-light leading-relaxed">
-                職人の魂が宿る、児島デニム。<br />
+                職人の魂が宿る、児島ジーンズ。<br />
                 色落ちすらも、美しいアートになる。
               </p>
             </FadeInSection>
@@ -788,7 +791,7 @@ export default function App() {
 
             <FadeInSection delay={300}>
               <div className="w-full h-48 sm:h-64 md:h-96 bg-blue-900/30 rounded-[24px] border border-blue-500/20 shadow-2xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center backdrop-blur-sm overflow-hidden relative">
-                <img src={kojimajeansImg} className="w-full h-full object-cover" alt="Kojima Jeans" loading="lazy" decoding="async" />
+                <img src={kojimajeansImg} className="w-full h-full object-cover" alt="児島ジーンズ" loading="lazy" decoding="async" />
               </div>
             </FadeInSection>
           </div>
@@ -825,7 +828,7 @@ export default function App() {
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
                   <div className="aspect-[4/5] bg-orange-100/50 rounded-[24px] overflow-hidden border border-orange-200 shadow-xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center relative">
-                    <img src={kurashikiImg2} className="w-full h-full object-cover" alt="Kurashiki Bikan Historical Quarter" loading="lazy" decoding="async" />
+                    <img src={kurashikiImg2} className="w-full h-full object-cover" alt="倉敷美観地区" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
@@ -876,7 +879,7 @@ export default function App() {
               <div className="flex-1 w-full max-w-sm md:max-w-none mx-auto">
                 <FadeInSection delay={400}>
                   <div className="aspect-[4/5] bg-green-50/50 rounded-[24px] overflow-hidden border border-green-200 shadow-xl hover:-translate-y-1 transition-all duration-500 flex items-center justify-center relative">
-                    <img src={hiruzenkogen} className="w-full h-full object-cover" alt="Hiruzen Kogen" loading="lazy" decoding="async" />
+                    <img src={hiruzenkogen} className="w-full h-full object-cover" alt="蒜山高原" loading="lazy" decoding="async" />
                   </div>
                 </FadeInSection>
               </div>
@@ -921,96 +924,56 @@ export default function App() {
                     <p className="text-gray-500 font-bold tracking-widest">14日間の天気データを解析中...</p>
                   </div>
                 ) : (
-                  <div className="relative z-10">
-                    {/* おすすめ日程ヘッダー */}
-                    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 border-b border-blue-100 pb-8">
-                      <div>
-                        <h3 className="text-2xl md:text-4xl font-bold text-gray-900 flex items-center flex-wrap gap-3">
-                          <Calendar className="w-8 h-8 text-blue-500" />
-                          おすすめ日程: <span className="text-blue-600">{weatherRecommendation.dateRange}</span>
+                  <div className="relative z-10 text-center">
+                    {weatherRecommendation.bestStartIndex !== -1 ? (
+                      <>
+                        {/* おすすめバッジ */}
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-sky-400 text-white text-sm font-bold px-5 py-2 rounded-full mb-8 shadow-md">
+                          <Sun className="w-4 h-4" />
+                          おすすめ日程
+                        </div>
+
+                        {/* 日程表示 */}
+                        <h3 className="text-3xl md:text-6xl font-bold text-gray-900 mb-2 tracking-tight">
+                          {weatherRecommendation.dateRange}
                         </h3>
-                      </div>
-                      <div className="flex items-start gap-3 bg-blue-50/50 px-5 py-4 rounded-xl border border-blue-50">
-                        <Thermometer className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm md:text-base font-medium leading-relaxed">
+
+                        {/* 気象情報 */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 my-8 md:my-10">
+                          <div className="flex items-center gap-2.5 bg-orange-50 px-5 py-3 rounded-2xl border border-orange-100">
+                            <Thermometer className="w-5 h-5 text-orange-500" />
+                            <span className="text-base md:text-lg font-semibold text-gray-700">最高気温 約{weatherRecommendation.avgMaxTemp}℃</span>
+                          </div>
+                          <div className="flex items-center gap-2.5 bg-sky-50 px-5 py-3 rounded-2xl border border-sky-100">
+                            <CloudSun className="w-5 h-5 text-sky-500" />
+                            <span className="text-base md:text-lg font-semibold text-gray-700">降水確率 約{weatherRecommendation.avgProb}%</span>
+                          </div>
+                        </div>
+
+                        {/* 説明テキスト */}
+                        <p className="text-gray-600 text-base md:text-xl font-light leading-relaxed max-w-xl mx-auto">
                           {weatherRecommendation.description}
                         </p>
-                      </div>
-                    </div>
-
-                    {/* 14日間タイムライン - 降水確率バーチャート */}
-                    {weatherRecommendation.days.length > 0 && (
-                      <div className="mb-6">
-                        {/* 凡例 */}
-                        <div className="flex items-center gap-4 md:gap-6 mb-4 text-xs md:text-sm text-gray-500">
-                          <span className="flex items-center gap-1.5"><Droplets className="w-3.5 h-3.5 text-blue-400" />降水確率</span>
-                          <span className="flex items-center gap-1.5"><Thermometer className="w-3.5 h-3.5 text-orange-400" />最高気温</span>
-                          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-500/20 border-2 border-blue-500 inline-block"></span>おすすめ期間</span>
+                      </>
+                    ) : (
+                      <>
+                        {/* おすすめ期間が見つからなかった場合 */}
+                        <div className="inline-flex items-center gap-2 bg-gray-400 text-white text-sm font-bold px-5 py-2 rounded-full mb-8">
+                          <CloudSun className="w-4 h-4" />
+                          天気情報
                         </div>
-
-                        {/* バーチャート */}
-                        <div className="flex items-end gap-[3px] sm:gap-1.5 md:gap-2 w-full" style={{ height: '180px' }}>
-                          {weatherRecommendation.days.map((day, idx) => {
-                            const isRecommended = weatherRecommendation.bestStartIndex !== -1 &&
-                              idx >= weatherRecommendation.bestStartIndex &&
-                              idx <= weatherRecommendation.bestStartIndex + 2;
-                            const prob = Math.round(day.avgProb);
-                            const barHeight = Math.max(prob, 4); // 最低4%の高さを確保
-                            const dateParts = day.dateStr.split('T')[0].split('-');
-                            const month = parseInt(dateParts[1], 10);
-                            const date = parseInt(dateParts[2], 10);
-                            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][new Date(day.dateStr).getDay()];
-                            const isWeekend = dayOfWeek === '土' || dayOfWeek === '日';
-                            const isToday = idx === 0;
-
-                            // 降水確率に応じたバーの色
-                            const barColor = isRecommended
-                              ? 'bg-gradient-to-t from-blue-500 to-blue-400'
-                              : prob <= 20 ? 'bg-gradient-to-t from-sky-300 to-sky-200'
-                              : prob <= 50 ? 'bg-gradient-to-t from-blue-300 to-blue-200'
-                              : 'bg-gradient-to-t from-blue-400 to-blue-300';
-
-                            return (
-                              <div key={idx} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-                                {/* ホバー時のツールチップ */}
-                                <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] md:text-xs px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-lg">
-                                  <div className="font-bold">{month}/{date}({dayOfWeek})</div>
-                                  <div>☔ {prob}% ／ 🌡️ {Math.round(day.maxTemp)}℃</div>
-                                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-                                </div>
-
-                                {/* 気温ラベル（デスクトップのみ） */}
-                                <span className="hidden md:block text-[10px] text-orange-500 font-bold mb-1">{Math.round(day.maxTemp)}°</span>
-
-                                {/* 降水確率バー */}
-                                <div
-                                  className={`w-full rounded-t-md ${barColor} ${isRecommended ? 'ring-2 ring-blue-500 ring-offset-1 shadow-lg shadow-blue-200' : ''} transition-all duration-300 group-hover:brightness-110 relative`}
-                                  style={{ height: `${barHeight}%`, minHeight: '6px' }}
-                                >
-                                {/* おすすめ期間マーク（削除済） */}
-                                </div>
-
-                                {/* 日付ラベル */}
-                                <div className={`mt-1.5 md:mt-2 text-center leading-none ${isRecommended ? 'font-black' : 'font-medium'}`}>
-                                  <div className={`text-[10px] md:text-xs ${isToday ? 'text-blue-600 font-black' : isRecommended ? 'text-blue-600' : 'text-gray-500'}`}>
-                                    {isToday ? '今日' : `${date}`}
-                                  </div>
-                                  <div className={`text-[9px] md:text-[10px] mt-0.5 ${isWeekend ? (dayOfWeek === '日' ? 'text-red-400' : 'text-blue-400') : 'text-gray-400'}`}>
-                                    {dayOfWeek}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-
-                        {/* おすすめ期間のハイライトラベル（削除済） */}
-                      </div>
+                        <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight">
+                          {weatherRecommendation.dateRange}
+                        </h3>
+                        <p className="text-gray-600 text-base md:text-xl font-light leading-relaxed max-w-xl mx-auto">
+                          {weatherRecommendation.description}
+                        </p>
+                      </>
                     )}
 
-                    {/* フッターアクション */}
-                    <div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
-                      <p className="text-xs text-gray-400 flex items-center gap-1">
+                    {/* フッター */}
+                    <div className="flex justify-center pt-8 mt-10 border-t border-blue-50">
+                      <p className="text-xs text-gray-400 flex items-center gap-1.5">
                         <CloudSun className="w-3.5 h-3.5" />
                         データ取得：Open-Meteo API
                       </p>
