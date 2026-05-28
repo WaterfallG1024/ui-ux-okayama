@@ -4,11 +4,20 @@ import tailwindcss from '@tailwindcss/vite'
 import babel from '@rolldown/plugin-babel'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tailwindcss(),
     babel({ presets: [reactCompilerPreset()] })
   ],
-  base: '/ui-ux-okayama/',
-})
+  base: mode === 'submit'
+    ? './'
+    : '/ui-ux-okayama/',
+
+  build: {
+    // 通常はdist
+    outDir: mode === 'submit'
+      ? 'dist-submit'
+      : 'dist',
+  },
+}))
