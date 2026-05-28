@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { DetailModal } from './components/ui/DetailModal';
+import { GyroPermissionModal } from './components/ui/GyroPermissionModal';
 import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
 import { HeroSection } from './components/sections/HeroSection';
@@ -20,10 +21,11 @@ export default function App() {
   const [activeDetail, setActiveDetail] = useState(null);
   const [showBackgroundInfo, setShowBackgroundInfo] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const [showGyroModal, setShowGyroModal] = useState(false);
 
   // カスタムフックを利用してロジックを分離
   const weatherRecommendation = useWeather();
-  const sceneRef = useParallax();
+  const { sceneRef, gyroPermission, requestGyroPermission, setGyroPermission } = useParallax();
   
   const heroRef = useRef(null);
 
@@ -43,6 +45,33 @@ export default function App() {
     };
   }, []);
 
+  // ローディング完了後、ジャイロ許可が未決定なら自動でモーダル表示
+  useEffect(() => {
+    if (!isLoading && gyroPermission === 'prompt') {
+      // ローディングアニメーション終了後に少し遅延してモーダルを表示
+      const timer = setTimeout(() => {
+        setShowGyroModal(true);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, gyroPermission]);
+
+  // ジャイロ許可時の処理
+  const handleGyroAllow = () => {
+    setShowGyroModal(false);
+    requestGyroPermission();
+  };
+
+  // ジャイロ拒否時の処理
+  const handleGyroDeny = (dontShowAgain) => {
+    setShowGyroModal(false);
+    if (dontShowAgain) {
+      setGyroPermission('denied_permanent');
+    } else {
+      setGyroPermission('denied');
+    }
+  };
+
   // ナビゲーション用のスムーズスクロール処理
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -55,6 +84,13 @@ export default function App() {
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500 selection:text-white">
       {/* 詳細モーダル（オーバーレイ） */}
       <DetailModal detailId={activeDetail} onClose={() => setActiveDetail(null)} />
+
+      {/* ジャイロ許可モーダル */}
+      <GyroPermissionModal
+        isOpen={showGyroModal}
+        onAllow={handleGyroAllow}
+        onDeny={handleGyroDeny}
+      />
 
       {/* 初期ローディング画面 */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
