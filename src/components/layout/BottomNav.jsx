@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import { NAV_ITEMS } from '../../constants';
 
-export const BottomNav = ({ isHeroVisible, scrollToSection, activeSection }) => {
+export const BottomNav = ({ isHeroVisible, scrollToSection, scrollToTop, activeSection }) => {
   return (
     <div
       className={`fixed bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 z-[90] transition-all duration-700 ease-out flex items-center justify-center gap-2 sm:gap-4 w-[98%] sm:w-auto max-w-5xl ${!isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'}`}
@@ -25,7 +25,7 @@ export const BottomNav = ({ isHeroVisible, scrollToSection, activeSection }) => 
 
       <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-white/90 backdrop-blur-xl border border-[#E9E9E7] rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center p-1 sm:p-2">
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={scrollToTop}
           onTouchStart={() => {}}
           className="w-full h-full flex items-center justify-center hover:bg-[#F7F7F5] active:bg-[#F0F0F0] rounded-full transition-all group cursor-pointer"
           aria-label="トップに戻る"

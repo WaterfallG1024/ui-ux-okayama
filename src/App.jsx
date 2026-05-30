@@ -23,6 +23,8 @@ export default function App() {
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const [showGyroModal, setShowGyroModal] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
 
   // カスタムフックを利用してロジックを分離
   const weatherRecommendation = useWeather();
@@ -45,7 +47,7 @@ export default function App() {
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !isScrollingRef.current) {
             setActiveSection(entry.target.id);
           }
         });
@@ -99,8 +101,38 @@ export default function App() {
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) {
+      // スクロール中フラグを立ててObserverの更新を一時停止し、直ちにクリックしたセクションをアクティブにする
+      isScrollingRef.current = true;
+      setActiveSection(id);
+      
       section.scrollIntoView({ behavior: 'smooth' });
+
+      // 既存のタイマーがあればクリア
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // スムーズスクロール完了の目安（約1秒後）にフラグを解除
+      scrollTimeoutRef.current = setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 1000);
     }
+  };
+
+  // ページトップへのスムーズスクロール処理
+  const scrollToTop = () => {
+    isScrollingRef.current = true;
+    setActiveSection('');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 1000);
   };
 
   return (
@@ -145,7 +177,7 @@ export default function App() {
       </main>
 
       {/* レイアウト */}
-      <BottomNav isHeroVisible={isHeroVisible} scrollToSection={scrollToSection} activeSection={activeSection} />
+      <BottomNav isHeroVisible={isHeroVisible} scrollToSection={scrollToSection} scrollToTop={scrollToTop} activeSection={activeSection} />
       <Footer />
     </div>
   );
