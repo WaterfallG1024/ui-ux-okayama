@@ -39,6 +39,10 @@ export const GyroPermissionModal = ({ isOpen, onAllow, onDeny }) => {
     onDeny(dontShowAgain);
   };
 
+  const handleAllowClick = () => {
+    onAllow(dontShowAgain);
+  };
+
   if (!shouldRender) return null;
 
   return (
@@ -63,8 +67,8 @@ export const GyroPermissionModal = ({ isOpen, onAllow, onDeny }) => {
           <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0a0a0a] to-transparent"></div>
           {/* 画像上のアイコンオーバーレイ */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-purple-500/20 backdrop-blur-md border border-purple-400/30 flex items-center justify-center shadow-2xl">
-              <Smartphone className="w-10 h-10 md:w-12 md:h-12 text-purple-300" />
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl">
+              <Smartphone className="w-10 h-10 md:w-12 md:h-12 text-white" />
             </div>
           </div>
         </div>
@@ -83,11 +87,11 @@ export const GyroPermissionModal = ({ isOpen, onAllow, onDeny }) => {
             <div className="relative flex items-center justify-center">
               <input
                 type="checkbox"
-                className="appearance-none w-5 h-5 border-2 border-gray-500 rounded-md bg-transparent checked:bg-purple-600 checked:border-purple-600 transition-colors cursor-pointer"
+                className="appearance-none w-5 h-5 border-2 border-gray-500 rounded-md bg-transparent checked:bg-white checked:border-white transition-colors cursor-pointer"
                 checked={dontShowAgain}
                 onChange={(e) => setDontShowAgain(e.target.checked)}
               />
-              {dontShowAgain && <Check className="absolute w-3.5 h-3.5 text-white pointer-events-none" />}
+              {dontShowAgain && <Check className="absolute w-3.5 h-3.5 text-black pointer-events-none" />}
             </div>
             <span>今後、このメッセージを表示しない</span>
           </label>
@@ -95,15 +99,15 @@ export const GyroPermissionModal = ({ isOpen, onAllow, onDeny }) => {
           {/* 許可・拒否ボタン */}
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={onAllow}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 md:py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg"
+              onClick={handleAllowClick}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 md:py-4 bg-white hover:bg-gray-200 text-black font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
             >
               <Check className="w-5 h-5" />
               <span className="text-sm md:text-base">許可する</span>
             </button>
             <button
               onClick={handleDenyClick}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 border border-white/20"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 border border-white/20 cursor-pointer"
             >
               <X className="w-5 h-5" />
               <span className="text-sm md:text-base">許可しない</span>

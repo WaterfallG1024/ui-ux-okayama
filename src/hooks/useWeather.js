@@ -3,84 +3,115 @@ import { useState, useEffect } from 'react';
 export const useWeather = () => {
   const [weatherRecommendation, setWeatherRecommendation] = useState({
     loading: true,
-    dateRange: '',
+    topDays: [],
     description: '',
-    bestStartIndex: -1,
-    avgProb: 0,
-    avgMaxTemp: 0
+    error: false
   });
 
   useEffect(() => {
     // 岡山市の天気データを取得
     const fetchWeather = async () => {
       try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.65&longitude=133.9333&hourly=temperature_2m,precipitation_probability,precipitation,rain&forecast_days=14');
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.65&longitude=133.9333&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=Asia%2FTokyo&forecast_days=14');
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
 
-        if (!data || !data.hourly || !data.hourly.time) {
+        if (!data || !data.daily || !data.daily.time) {
           throw new Error('Invalid data structure from API');
         }
 
-        const hourly = data.hourly;
+        const daily = data.daily;
         const days = [];
-        // 24時間ごとに1日のデータとして集計
-        for (let i = 0; i < hourly.time.length; i += 24) {
-          let maxProb = 0;
-          let maxTemp = -999;
-          // 配列外アクセスを防ぐため、jの範囲も制限する
-          for (let j = 0; j < 24 && i + j < hourly.time.length; j++) {
-            const prob = hourly.precipitation_probability[i + j] || 0;
-            if (prob > maxProb) maxProb = prob;
-            if (hourly.temperature_2m[i + j] > maxTemp) {
-              maxTemp = hourly.temperature_2m[i + j];
-            }
+        
+        // 取得した14日間の日別データを処理
+        for (let i = 0; i < daily.time.length; i++) {
+          const maxProb = daily.precipitation_probability_max[i] || 0;
+          const maxTemp = daily.temperature_2m_max[i] || 0;
+          const dateStr = daily.time[i]; // "YYYY-MM-DD"
+          
+          // スコア計算
+          let score = 100 - maxProb;
+          if (maxTemp >= 18 && maxTemp <= 28) {
+            score += 20;
+          } else if (maxTemp < 10 || maxTemp > 35) {
+            score -= 20;
           }
+
           days.push({
-            dateStr: hourly.time[i], // 例: "2026-05-27T00:00"
-            maxProb: maxProb, // その日の最大降水確率
-            maxTemp: maxTemp
+            dateStr: dateStr,
+            maxProb: maxProb,
+            maxTemp: maxTemp,
+            score: score
           });
         }
 
-        let bestStartIndex = -1;
-        let minAvgProb = 101; // 最小の降水確率（3日間平均）
+        const formatShortDate = (dateStr) => {
+          const d = new Date(dateStr);
+          const dow = ['日', '月', '火', '水', '木', '金', '土'][d.getDay()];
+          return `${d.getMonth() + 1}/${d.getDate()}(${dow})`;
+        };
 
-        // 3日間の連続で一番降水確率が低い期間を探す（3日間の最大値が50%以下を条件とする）
-        for (let i = 0; i < days.length - 2; i++) {
-          const threeDaysMaxProb = Math.max(days[i].maxProb, days[i + 1].maxProb, days[i + 2].maxProb);
-          if (threeDaysMaxProb < minAvgProb && threeDaysMaxProb <= 50) {
-            minAvgProb = threeDaysMaxProb;
-            bestStartIndex = i;
+        const formatDayOnly = (dateStr) => {
+          const d = new Date(dateStr);
+          const dow = ['日', '月', '火', '水', '木', '金', '土'][d.getDay()];
+          return `${d.getDate()}(${dow})`;
+        };
+
+        // 連続する2日間（1泊2日）のペアを作成
+        const pairs = [];
+        for (let i = 0; i < days.length - 1; i++) {
+          const day1 = days[i];
+          const day2 = days[i + 1];
+          
+          const maxProb = Math.max(day1.maxProb, day2.maxProb);
+          const avgMaxTemp = Math.round((day1.maxTemp + day2.maxTemp) / 2);
+          const totalScore = day1.score + day2.score;
+          
+          pairs.push({
+            startIndex: i,
+            dateStr: day1.dateStr, // react key用
+            formattedDate: `${formatShortDate(day1.dateStr)}〜${formatDayOnly(day2.dateStr)}`,
+            maxProb: maxProb,
+            maxTemp: avgMaxTemp,
+            score: totalScore
+          });
+        }
+
+        // スコアが高い順にソート
+        pairs.sort((a, b) => b.score - a.score);
+
+        // 重複する日（例：1-2日目と2-3日目）を除外しながらトップ3を選ぶ
+        const topDays = [];
+        const usedIndices = new Set();
+        
+        for (const pair of pairs) {
+          if (topDays.length >= 3) break;
+          if (!usedIndices.has(pair.startIndex) && !usedIndices.has(pair.startIndex + 1)) {
+            topDays.push(pair);
+            usedIndices.add(pair.startIndex);
+            usedIndices.add(pair.startIndex + 1);
           }
         }
+        
+        // 表示用に時系列順に並び替え
+        topDays.sort((a, b) => a.startIndex - b.startIndex);
 
-        if (bestStartIndex !== -1) {
-          const startDateStr = days[bestStartIndex].dateStr;
-          const endDateStr = days[bestStartIndex + 2].dateStr;
+        const avgTopProb = Math.round((topDays[0].maxProb + topDays[1].maxProb + topDays[2].maxProb) / 3);
 
-          // 文字列 "YYYY-MM-DDThh:mm" から "M月D日" を生成
-          const formatDate = (dateStr) => {
-            const parts = dateStr.split('T')[0].split('-');
-            return `${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
-          };
-
-          const avgMaxTemp = Math.round((days[bestStartIndex].maxTemp + days[bestStartIndex + 1].maxTemp + days[bestStartIndex + 2].maxTemp) / 3);
-
-          setWeatherRecommendation({
-            loading: false,
-            dateRange: `${formatDate(startDateStr)} 〜 ${formatDate(endDateStr)}`,
-            description: minAvgProb <= 20 ? `降水確率が低く、最高気温は約${avgMaxTemp}℃の予想です。絶好の旅行日和になります！` : `雨の心配は少なく、最高気温は約${avgMaxTemp}℃の予想です。`,
-            bestStartIndex: bestStartIndex,
-            avgProb: Math.round(minAvgProb),
-            avgMaxTemp: avgMaxTemp
-          });
-        } else {
-          setWeatherRecommendation({ loading: false, dateRange: '直近2週間', description: '天気の変動が大きいため、雨具の準備をおすすめします。', bestStartIndex: -1, avgProb: 0, avgMaxTemp: 0 });
-        }
+        setWeatherRecommendation({
+          loading: false,
+          topDays: topDays,
+          description: '',
+          error: false
+        });
       } catch (err) {
         console.error("Weather API error:", err);
-        setWeatherRecommendation({ loading: false, dateRange: '取得エラー', description: '天気情報の取得に失敗しました。少し時間をおいて再度お試しください。', bestStartIndex: -1, avgProb: 0, avgMaxTemp: 0 });
+        setWeatherRecommendation({ 
+          loading: false, 
+          topDays: [],
+          description: '天気情報の取得に失敗しました。少し時間をおいて再度お試しください。', 
+          error: true
+        });
       }
     };
     fetchWeather();

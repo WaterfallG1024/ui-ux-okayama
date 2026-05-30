@@ -22,6 +22,7 @@ export default function App() {
   const [showBackgroundInfo, setShowBackgroundInfo] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const [showGyroModal, setShowGyroModal] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   // カスタムフックを利用してロジックを分離
   const weatherRecommendation = useWeather();
@@ -30,18 +31,40 @@ export default function App() {
   const heroRef = useRef(null);
 
   useEffect(() => {
-    // ヒーローセクションの表示状態を監視（ボトムナビの表示切り替え用）
-    const observer = new IntersectionObserver(
+    // ヒーローセクションの表示状態監視（ボトムナビの表示切り替え用）
+    const heroObserver = new IntersectionObserver(
       ([entry]) => {
         setIsHeroVisible(entry.isIntersecting);
       },
       { threshold: 0.1 }
     );
     const currentHero = heroRef.current;
-    if (currentHero) observer.observe(currentHero);
+    if (currentHero) heroObserver.observe(currentHero);
+
+    // 各セクションの表示状態監視（スクロールスパイ・カレント表示用）
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -60% 0px' } // 画面の中央少し上付近に来た時を判定
+    );
+
+    const sectionIds = ['fruits', 'food', 'history', 'denim', 'tourism', 'weather', 'cta'];
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
 
     return () => {
-      if (currentHero) observer.unobserve(currentHero);
+      if (currentHero) heroObserver.unobserve(currentHero);
+      sectionIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) sectionObserver.unobserve(el);
+      });
     };
   }, []);
 
@@ -57,9 +80,9 @@ export default function App() {
   }, [isLoading, gyroPermission]);
 
   // ジャイロ許可時の処理
-  const handleGyroAllow = () => {
+  const handleGyroAllow = (dontShowAgain) => {
     setShowGyroModal(false);
-    requestGyroPermission();
+    requestGyroPermission(dontShowAgain);
   };
 
   // ジャイロ拒否時の処理
@@ -122,7 +145,7 @@ export default function App() {
       </main>
 
       {/* レイアウト */}
-      <BottomNav isHeroVisible={isHeroVisible} scrollToSection={scrollToSection} />
+      <BottomNav isHeroVisible={isHeroVisible} scrollToSection={scrollToSection} activeSection={activeSection} />
       <Footer />
     </div>
   );

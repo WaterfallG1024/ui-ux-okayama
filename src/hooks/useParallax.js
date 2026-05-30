@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+const checkIsIPad = () => {
+  if (typeof navigator === 'undefined') return false;
+  return /ipad/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
+const checkIsIPhone = () => {
+  if (typeof navigator === 'undefined') return false;
+  return /iphone/i.test(navigator.userAgent);
+};
+
 export const useParallax = () => {
   const sceneRef = useRef(null);
   const requestRef = useRef();
@@ -8,7 +18,7 @@ export const useParallax = () => {
   const current = useRef({ x: 0, y: 0 });
 
   // iOS向けジャイロパーミッションの状態管理
-  // 'unknown' | 'prompt' | 'granted' | 'denied' | 'not-needed'
+  // 'unknown' | 'prompt' | 'granted' | 'denied' | 'not-needed' | 'disabled'
   const [gyroPermission, setGyroPermission] = useState(() => {
     try {
       return localStorage.getItem('okayama_gyro_permission') || 'unknown';
@@ -20,7 +30,7 @@ export const useParallax = () => {
   // 状態が変更されたらLocalStorageに保存
   useEffect(() => {
     try {
-      if (gyroPermission === 'granted' || gyroPermission === 'denied_permanent') {
+      if (gyroPermission === 'granted_permanent' || gyroPermission === 'denied_permanent' || gyroPermission === 'disabled') {
         localStorage.setItem('okayama_gyro_permission', gyroPermission);
       }
     } catch (e) {
@@ -62,41 +72,42 @@ export const useParallax = () => {
   }, []);
 
   // iOS向け: ユーザータップによるジャイロ許可リクエスト
-  const requestGyroPermission = useCallback(async () => {
+  const requestGyroPermission = useCallback(async (dontShowAgain) => {
     // 開発用一時対応：Windows/AndroidなどrequestPermissionがない環境でもボタン動作をシミュレート
     if (typeof DeviceOrientationEvent === 'undefined' || typeof DeviceOrientationEvent.requestPermission !== 'function') {
-      setGyroPermission('granted');
+      setGyroPermission(dontShowAgain ? 'granted_permanent' : 'granted');
       return;
     }
 
     try {
       const result = await DeviceOrientationEvent.requestPermission();
       if (result === 'granted') {
-        setGyroPermission('granted');
+        setGyroPermission(dontShowAgain ? 'granted_permanent' : 'granted');
       } else {
-        setGyroPermission('denied');
+        setGyroPermission(dontShowAgain ? 'denied_permanent' : 'denied');
       }
     } catch (err) {
       console.error('ジャイロ許可リクエストに失敗:', err);
-      setGyroPermission('denied');
+      setGyroPermission(dontShowAgain ? 'denied_permanent' : 'denied');
     }
   }, []);
 
   useEffect(() => {
     // 許可状態の初期判定
     if (gyroPermission === 'unknown') {
-      if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // iOS 13+: requestPermission API が存在する → ユーザー操作が必要
+      if (checkIsIPad()) {
+        // iPadはデフォルトでパララックスを無効化
+        setGyroPermission('disabled');
+      } else if (checkIsIPhone() && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iPhoneの場合はモーダルを表示して許可を求める
         setGyroPermission('prompt');
       } else {
-        // Android や旧iOS、PC: 許可不要またはジャイロなし
-        //setGyroPermission('not-needed');
-        setGyroPermission('prompt');
+        // Windows・Android等はデフォルトでパララックスを有効化
+        setGyroPermission('not-needed');
       }
     }
 
-    const isParallaxDisabled = gyroPermission === 'prompt' || gyroPermission === 'unknown' || gyroPermission === 'denied' || gyroPermission === 'denied_permanent';
+    const isParallaxDisabled = gyroPermission === 'prompt' || gyroPermission === 'unknown' || gyroPermission === 'denied' || gyroPermission === 'denied_permanent' || gyroPermission === 'disabled';
 
     // マウスカーソルの位置からパララックスの目標角度を計算
     const handleMouseMove = (e) => {
@@ -118,7 +129,7 @@ export const useParallax = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    if (gyroPermission === 'granted' || gyroPermission === 'not-needed') {
+    if (gyroPermission === 'granted' || gyroPermission === 'granted_permanent' || gyroPermission === 'not-needed') {
       window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
     }
 

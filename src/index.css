@@ -5,9 +5,6 @@
   --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
 }
 
-* {
-  cursor: url('./assets/MousePointer.png'), auto !important;
-}
 
 /* :root {
   --text: #6b6375;

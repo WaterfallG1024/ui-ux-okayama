@@ -1,9 +1,9 @@
-import { Grape, Castle, Scissors, Compass, UtensilsCrossed } from 'lucide-react';
+import { Grape, Castle, Scissors, Compass, UtensilsCrossed, CloudSun } from 'lucide-react';
 import kibitsuShrine from '../assets/KibitsuShrine.webp';
 import okayamaCastleImg2 from '../assets/OkayamaCastle2.webp';
 import kojimajeansImg2 from '../assets/KojimaJeans2.webp';
 import kurashikiImg from '../assets/KurashikiBikantiku.webp';
-import hiruzenkogen2 from '../assets/Hiruzenkogen2.webp';
+import hiruzenkogen from '../assets/Hiruzenkogen.webp';
 import peach from '../assets/Peach.webp';
 import muscat from '../assets/Muscat.webp';
 import pione from '../assets/Pione.webp';
@@ -47,16 +47,17 @@ export const DETAIL_DATA = {
   hiruzen: {
     title: "雄大な自然、蒜山高原",
     description: "西日本屈指のリゾート地、蒜山（ひるぜん）高原。なだらかな山々と広大な牧草地が広がり、ジャージー牛がのんびりと草を食む牧歌的な風景に癒やされます。サイクリングやキャンプ、そして名物の「ひるぜん焼そば」も外せません。",
-    image: hiruzenkogen2
+    image: hiruzenkogen
   }
 };
 
 export const NAV_ITEMS = [
-  { id: 'fruits', label: 'FRUITS', icon: Grape, color: 'text-green-400', navHoverColor: 'group-hover:text-green-600' },
-  { id: 'food', label: 'FOOD', icon: UtensilsCrossed, color: 'text-yellow-300', navHoverColor: 'group-hover:text-orange-500' },
-  { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300', navHoverColor: 'group-hover:text-slate-600' },
-  { id: 'denim', label: 'DENIM', icon: Scissors, color: 'text-blue-300', navHoverColor: 'group-hover:text-blue-600' },
-  { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300', navHoverColor: 'group-hover:text-amber-600' },
+  { id: 'fruits', label: 'FRUITS', icon: Grape, color: 'text-green-400', activeColor: 'text-green-600', navHoverColor: 'group-hover:text-green-600 group-active:text-green-600' },
+  { id: 'food', label: 'FOOD', icon: UtensilsCrossed, color: 'text-yellow-300', activeColor: 'text-orange-500', navHoverColor: 'group-hover:text-orange-500 group-active:text-orange-500' },
+  { id: 'history', label: 'HISTORY', icon: Castle, color: 'text-gray-300', activeColor: 'text-slate-600', navHoverColor: 'group-hover:text-slate-600 group-active:text-slate-600' },
+  { id: 'denim', label: 'JEANS', icon: Scissors, color: 'text-blue-400', activeColor: 'text-blue-500', navHoverColor: 'group-hover:text-blue-500 group-active:text-blue-500' },
+  { id: 'tourism', label: 'TOURISM', icon: Compass, color: 'text-orange-300', activeColor: 'text-amber-600', navHoverColor: 'group-hover:text-amber-600 group-active:text-amber-600' },
+  { id: 'weather', label: 'WEATHER', icon: CloudSun, color: 'text-sky-400', activeColor: 'text-sky-500', navHoverColor: 'group-hover:text-sky-500 group-active:text-sky-500'}
 ];
 
 export const FRUITS_DATA = [

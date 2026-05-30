@@ -52,7 +52,7 @@ export const DetailModal = ({ detailId, onClose }) => {
         <button
           onClick={onClose}
           aria-label="閉じる"
-          className="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:bg-white/20 transition-all backdrop-blur-md hover:scale-105 active:scale-95 shadow-lg border border-white/10"
+          className="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:bg-white/20 transition-all backdrop-blur-md hover:scale-105 active:scale-95 shadow-lg border border-white/10 cursor-pointer"
         >
           <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>

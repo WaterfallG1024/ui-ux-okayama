@@ -35,7 +35,7 @@ export const HeroSection = ({
               西日本豪雨災害で浸水被害にあった農地に土壌改良のためひまわりを植えたのがきっかけで誕生したひまわり畑。駅からひまわり畑に向かう途中の潜水橋も見どころで、そのノスタルジックな風景を撮影する人も多数いる。
             </p>
           </div>
-          <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0 [@media(max-height:500px)]:mt-1">
+          <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(false); setFocusLayer('middle'); }} className="shrink-0 px-6 py-3 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg group w-full md:w-auto mt-2 md:mt-0 [@media(max-height:500px)]:mt-1 cursor-pointer">
             <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
             <span>閉じる</span>
           </button>
@@ -83,7 +83,7 @@ export const HeroSection = ({
             }}
           >
             <h1
-              className={`text-[20vw] md:text-[14vw] [@media(max-height:500px)]:text-[25vh] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 hover:from-orange-200 hover:to-orange-400 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105 transition-all duration-500 antialiased ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
+              className={`text-[20vw] md:text-[14vw] [@media(max-height:500px)]:text-[25vh] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 hover:from-orange-200 hover:to-orange-400 opacity-70 hover:opacity-100 hover:scale-105 transition-all duration-500 antialiased ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
               style={{
                 filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))'
               }}
@@ -92,7 +92,7 @@ export const HeroSection = ({
             >
               おかやま
             </h1>
-            <p className={`text-sm sm:text-lg md:text-3xl [@media(max-height:500px)]:text-base font-medium tracking-widest text-blue-400 mt-[-1vw] md:mt-[-2vw] cursor-pointer drop-shadow-lg flex items-center gap-2 justify-center ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
+            <p className={`text-sm sm:text-lg md:text-3xl [@media(max-height:500px)]:text-base font-medium tracking-widest text-blue-400 mt-[-1vw] md:mt-[-2vw] drop-shadow-lg flex items-center gap-2 justify-center ${showBackgroundInfo ? 'pointer-events-none' : 'pointer-events-auto'}`}
               onMouseEnter={() => !showBackgroundInfo && setFocusLayer('middle')}
               onClick={() => !showBackgroundInfo && setFocusLayer('middle')}
             >
@@ -106,12 +106,12 @@ export const HeroSection = ({
               onMouseEnter={() => !showBackgroundInfo && setFocusLayer('middle')}
             >
               {NAV_ITEMS.map((item) => (
-                <button key={item.id} onClick={(e) => { e.stopPropagation(); scrollToSection(item.id); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group">
+                <button key={item.id} onClick={(e) => { e.stopPropagation(); scrollToSection(item.id); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group cursor-pointer">
                   <item.icon className={`w-5 h-5 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4 ${item.color} group-hover:scale-110 transition-transform`} />
                   <span className="text-xs md:text-sm [@media(max-height:500px)]:text-[10px] font-bold tracking-widest text-white mt-0.5 truncate">{item.label}</span>
                 </button>
               ))}
-              <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(true); setFocusLayer('back'); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group">
+              <button onClick={(e) => { e.stopPropagation(); setShowBackgroundInfo(true); setFocusLayer('back'); }} className="flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3 px-2 sm:px-6 py-3 md:px-8 md:py-4 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:px-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all hover:scale-105 sm:hover:scale-110 shadow-lg group cursor-pointer">
                 <ImageIcon className="w-5 h-5 md:w-6 md:h-6 [@media(max-height:500px)]:w-4 [@media(max-height:500px)]:h-4 text-green-300 group-hover:scale-110 transition-transform" />
                 <span className="text-xs md:text-sm [@media(max-height:500px)]:text-[10px] font-bold tracking-widest text-white mt-0.5 truncate">背景をみる</span>
               </button>

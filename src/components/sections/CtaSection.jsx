@@ -2,7 +2,7 @@ import { FadeInSection } from '../ui/FadeInSection';
 
 export const CtaSection = () => {
   return (
-    <section id="plan" className="py-20 md:py-32 bg-white text-black text-center px-4">
+    <section id="cta" className="py-20 md:py-32 bg-white text-black text-center px-4">
       <div className="max-w-3xl mx-auto">
         <FadeInSection>
           <div className="mb-12 md:mb-20 flex justify-center w-full px-2 overflow-visible relative z-50">
@@ -29,7 +29,7 @@ export const CtaSection = () => {
         <FadeInSection delay={400}>
           <div className="flex justify-center mt-20 md:mt-32 px-4 overflow-visible pb-10">
             <div
-              className="relative inline-block bg-[#FFE600] border-[6px] border-black p-8 md:p-12 shadow-[15px_15px_0px_rgba(0,0,0,1)] text-black font-black leading-tight max-w-3xl cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative inline-block bg-[#FFE600] border-[6px] border-black p-8 md:p-12 shadow-[15px_15px_0px_rgba(0,0,0,1)] text-black font-black leading-tight max-w-3xl hover:scale-105 transition-transform duration-300"
               style={{
                 transform: 'perspective(1000px) rotateY(-20deg) rotateX(5deg) skewY(3deg)',
                 transformOrigin: 'center center',
@@ -48,11 +48,11 @@ export const CtaSection = () => {
                 岡山弁の<span className="text-2xl md:text-6xl text-[#FF004D] mx-2 inline-block -rotate-3" style={{ textShadow: '-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 4px 4px 0 #000' }}>「はよーしねー」</span>は
               </p>
               <p className="mb-8 md:mb-12 text-2xl md:text-4xl text-center">
-                「早く死ね」では<span className="text-3xl md:text-5xl inline-block rotate-2 ml-1">ありません。</span>
+                "はやくしなさい"<span className="text-3xl md:text-5xl inline-block rotate-2 ml-1">という意味。</span>
               </p>
               <div className="flex justify-center">
                 <p className="text-xl md:text-3xl text-center text-black bg-white border-4 border-black p-4 md:p-6 rounded-2xl shadow-[6px_6px_0px_rgba(0,0,0,1)] inline-block">
-                  「早くしなさい」という意味なので、<br className="md:hidden" />ご安心ください
+                  怖い言葉ではないので<br className="md:hidden" />ご安心を！！
                 </p>
               </div>
             </div>
