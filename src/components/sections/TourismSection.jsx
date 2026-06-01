@@ -17,9 +17,8 @@ export const TourismSection = ({ setActiveDetail }) => {
           titleColorClass="text-gray-900"
           description={
             <>
-              倉敷美観地区。<br />
-              柳が揺れる川沿いを歩けば、江戸の情緒が蘇る。<br />
-              歴史とアートが交差する、ノスタルジックな癒やしの時間。
+              柳が揺れる川沿いに息づく、美しき江戸の情緒。<br />
+              歴史とアートが交差する、心癒やされる時間。
             </>
           }
           descColorClass="text-gray-700"
@@ -49,9 +48,8 @@ export const TourismSection = ({ setActiveDetail }) => {
           titleColorClass="text-gray-900"
           description={
             <>
-              西日本を代表するリゾート地、蒜山高原。<br />
-              どこまでも続く緑の牧草地とジャージー牛たち。<br />
-              大自然の息吹を感じながら、心安らぐひとときを。
+              どこまでも続く緑の牧草地と、愛らしいジャージー牛。<br />
+              大自然の息吹を感じる、心安らぐ至福のひととき。
             </>
           }
           descColorClass="text-gray-700"

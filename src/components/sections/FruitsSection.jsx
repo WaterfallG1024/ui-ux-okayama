@@ -11,7 +11,7 @@ export const FruitsSection = ({ setActiveDetail }) => {
           icon={Grape}
           iconColorClass="text-green-500"
           title="果物の宝庫"
-          description={<>清水白桃の甘美な香り。マスカットの弾ける果汁。</>}
+          description={<>清水白桃の甘美な香りと、マスカットの弾ける果汁。<br />温暖な気候が育む、最高品質の果物たち。</>}
           buttonText="果物についてさらに詳しく"
           buttonColorClass="text-green-600 hover:text-green-500"
           onButtonClick={() => setActiveDetail('fruits')}

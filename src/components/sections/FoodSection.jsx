@@ -11,7 +11,7 @@ export const FoodSection = ({ setActiveDetail }) => {
           icon={UtensilsCrossed}
           iconColorClass="text-orange-500"
           title={<>絶品の、<br className="md:hidden" />岡山グルメ</>}
-          description={<>一度食べたら忘れられない。<br />五感を刺激する、こだわりのローカルフード。</>}
+          description={<>一度食べたら決して忘れられない、特別な味わい。<br />五感を刺激する、こだわりのローカルフード。</>}
           buttonText="グルメについてさらに詳しく"
           buttonColorClass="text-orange-600 hover:text-orange-500"
           onButtonClick={() => setActiveDetail('food')}

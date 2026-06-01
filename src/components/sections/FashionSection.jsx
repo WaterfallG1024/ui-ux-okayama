@@ -12,9 +12,9 @@ export const FashionSection = ({ setActiveDetail }) => {
           iconColorClass="text-blue-300"
           title="世界に誇る青"
           titleColorClass="text-blue-50"
-          description={<>職人の魂が宿る、児島ジーンズ。<br />色落ちすらも、美しいアートになる。</>}
+          description={<>熟練の職人の魂が宿る、世界に誇る児島ジーンズ。<br />色落ちすらも、美しく唯一無二のアートになる。</>}
           descColorClass="text-blue-200/80"
-          buttonText="児島デニムについてさらに詳しく"
+          buttonText="児島ジーンズについてさらに詳しく"
           buttonColorClass="text-blue-300 hover:text-blue-200"
           onButtonClick={() => setActiveDetail('denim')}
         />

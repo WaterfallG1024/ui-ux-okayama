@@ -16,9 +16,8 @@ export const HistorySection = ({ setActiveDetail }) => {
           titleColorClass="text-white"
           description={
             <>
-              日本中が知る英雄、桃太郎。<br />
-              そのルーツとされる吉備津彦命（きびつひこのみこと）と<br className="hidden md:block" />鬼神・温羅（うら）の戦いの舞台。<br />
-              神話と歴史が交差する、神秘的な物語がここから始まります。
+              誰もが知る英雄「桃太郎」のルーツとされる地。<br />
+              神話と歴史が交差する、神秘的な物語の舞台。
             </>
           }
           descColorClass="text-gray-400"
@@ -41,7 +40,7 @@ export const HistorySection = ({ setActiveDetail }) => {
           iconColorClass="text-gray-400"
           title="美しき漆黒"
           titleColorClass="text-white"
-          description={<>烏城とも呼ばれる堂々たる風格。</>}
+          description={<>「烏城」とも呼ばれる、黒漆塗りの堂々たる風格。<br />美しき漆黒の外観が、深い歴史の息吹を伝える。</>}
           descColorClass="text-gray-400"
           buttonText="岡山城についてさらに詳しく"
           buttonColorClass="text-blue-400 hover:text-blue-300"

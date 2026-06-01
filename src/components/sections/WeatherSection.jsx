@@ -66,9 +66,8 @@ export const WeatherSection = ({ weatherRecommendation }) => {
                 </div>
 
                 {/* データソースクレジット */}
-                <div className="flex justify-center pt-6 mt-8 border-t border-blue-50/80">
+                <div className="flex justify-end pt-6 mt-8 border-t border-blue-50/80">
                   <p className="text-xs text-gray-400 flex items-center gap-1.5">
-                    <CloudSun className="w-3.5 h-3.5" />
                     データ取得：Open-Meteo API
                   </p>
                 </div>
