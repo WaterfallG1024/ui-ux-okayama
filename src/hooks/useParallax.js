@@ -21,7 +21,7 @@ export const useParallax = () => {
   // 'unknown' | 'prompt' | 'granted' | 'denied' | 'not-needed' | 'disabled'
   const [gyroPermission, setGyroPermission] = useState(() => {
     try {
-      return localStorage.getItem('okayama_gyro_permission') || 'unknown';
+      return localStorage.getItem('okayama_gyro_permission_v2') || 'unknown';
     } catch (e) {
       return 'unknown';
     }
@@ -31,7 +31,7 @@ export const useParallax = () => {
   useEffect(() => {
     try {
       if (gyroPermission === 'granted_permanent' || gyroPermission === 'denied_permanent' || gyroPermission === 'disabled') {
-        localStorage.setItem('okayama_gyro_permission', gyroPermission);
+        localStorage.setItem('okayama_gyro_permission_v2', gyroPermission);
       }
     } catch (e) {
       console.warn('Failed to save gyro permission to localStorage', e);
