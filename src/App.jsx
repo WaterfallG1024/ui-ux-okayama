@@ -162,17 +162,13 @@ export default function App() {
           scrollToSection={scrollToSection}
         />
         
-        {/* 各コンテンツセクション */}
+        {/* 各セクション */}
         <FruitsSection setActiveDetail={setActiveDetail} />
         <FoodSection setActiveDetail={setActiveDetail} />
         <HistorySection setActiveDetail={setActiveDetail} />
         <FashionSection setActiveDetail={setActiveDetail} />
         <TourismSection setActiveDetail={setActiveDetail} />
-        
-        {/* 天気・旅行提案セクション */}
         <WeatherSection weatherRecommendation={weatherRecommendation} />
-        
-        {/* CTAセクション */}
         <CtaSection />
       </main>
 
