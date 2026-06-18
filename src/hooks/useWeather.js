@@ -11,6 +11,23 @@ export const useWeather = () => {
   useEffect(() => {
     // 岡山市の天気データを取得
     const fetchWeather = async () => {
+      // 1. キャッシュの確認：タブが開いている間に保存されたデータがあればそれを使う
+      const cachedData = sessionStorage.getItem('weatherCache');
+      if (cachedData) {
+        try {
+          const parsedCache = JSON.parse(cachedData);
+          setWeatherRecommendation({
+            loading: false,
+            topDays: parsedCache,
+            description: '',
+            error: false
+          });
+          return; // 保存されたデータがあるので、ここで処理を終了（APIは叩かない）
+        } catch (e) {
+          console.error("Cache parsing error", e);
+        }
+      }
+
       try {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.65&longitude=133.9333&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=Asia%2FTokyo&forecast_days=14');
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -97,6 +114,9 @@ export const useWeather = () => {
         topDays.sort((a, b) => a.startIndex - b.startIndex);
 
         const avgTopProb = Math.round((topDays[0].maxProb + topDays[1].maxProb + topDays[2].maxProb) / 3);
+
+        // 2. 新しく取得したデータを保存（ブラウザのタブを閉じるまで有効）
+        sessionStorage.setItem('weatherCache', JSON.stringify(topDays));
 
         setWeatherRecommendation({
           loading: false,
