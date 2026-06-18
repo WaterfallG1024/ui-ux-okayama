@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "homepage": "https://WaterfallG1024.github.io/ui-ux-okayama/",
+  
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "lucide-react": "^1.8.0",

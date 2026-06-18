@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
   ],
   base: mode === 'submit'
     ? './'
-    : '/ui-ux-okayama/',
+    : '/',
 
   build: {
     // 通常はdist
